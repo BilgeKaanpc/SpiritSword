@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharController : MonoBehaviour
 {
@@ -12,11 +13,14 @@ public class CharController : MonoBehaviour
     private float xAngTemp = 0.0f; //temp variable for angle
     private float yAngTemp = 0.0f;
     public static bool isTouch = true;
+    int attackCount = 0;
+    bool canTurn = true;
+    public Button strongAttackButton;
 
     [SerializeField] Animator animator;
 
     public GameObject head;
-
+    bool attackMoment = false;
     //Animations
     [SerializeField] Animation walkAnimation;
 
@@ -27,6 +31,7 @@ public class CharController : MonoBehaviour
     public Rigidbody rb;
     public Transform tr;
     Vector3 oldPosition;
+    Vector3 direction;
     void Start()
     {
         //Initialization our angles of camera
@@ -37,18 +42,13 @@ public class CharController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        Vector3 direction = tr.forward * veriableJoyStick.Vertical + tr.right * veriableJoyStick.Horizontal;
-        rb.velocity = direction * speed * Time.fixedDeltaTime;
-
-        Debug.Log("x deðeri:" + veriableJoyStick.Vertical);
-        Debug.Log("y deðeri:" + veriableJoyStick.Horizontal);
-        Debug.Log("z deðeri:" + direction.z);
-
-
+        if (!attackMoment)
+        {
+            direction = tr.forward * veriableJoyStick.Vertical + tr.right * veriableJoyStick.Horizontal;
+            rb.velocity = direction * speed * Time.fixedDeltaTime;
+        }
         // z ileri geri
         // x sag sol
-
-
 
         if (direction != stop)
             {
@@ -74,35 +74,41 @@ public class CharController : MonoBehaviour
     }
     void Update()
     {
-        if (veriableJoyStick.Vertical > 0.9f)
+        if (!attackMoment && animator.GetInteger("attack") == 0)
         {
-            animator.speed = 1;
-            animator.SetInteger("walk", 2);
-        }else if (veriableJoyStick.Horizontal > 0.3f)
-        {
-            animator.speed = veriableJoyStick.Horizontal;
-            animator.SetInteger("walk", -3);
+            if (veriableJoyStick.Vertical > 0.9f)
+            {
+                animator.speed = 1;
+                animator.SetInteger("walk", 2);
+            }
+            else if (veriableJoyStick.Horizontal > 0.3f)
+            {
+                animator.speed = veriableJoyStick.Horizontal;
+                animator.SetInteger("walk", -3);
+            }
+            else if (veriableJoyStick.Horizontal < -0.3f)
+            {
+                animator.speed = -veriableJoyStick.Horizontal;
+                animator.SetInteger("walk", -2);
+            }
+            else if (veriableJoyStick.Vertical > 0.0f)
+            {
+                animator.SetInteger("walk", 1);
+                animator.speed = veriableJoyStick.Vertical;
+            }
+            else if (veriableJoyStick.Vertical == 0)
+            {
+
+                animator.SetInteger("walk", 0);
+                animator.speed = 1;
+            }
+            else if (veriableJoyStick.Vertical < 0)
+            {
+                animator.SetInteger("walk", -1);
+                animator.speed = -veriableJoyStick.Vertical;
+            }
         }
-        else if (veriableJoyStick.Horizontal < -0.3f)
-        {
-            animator.speed = -veriableJoyStick.Horizontal;
-            animator.SetInteger("walk", -2);
-        }
-        else if (veriableJoyStick.Vertical > 0.0f)
-        {
-            animator.SetInteger("walk", 1);
-            animator.speed = veriableJoyStick.Vertical;
-        }
-        else if (veriableJoyStick.Vertical == 0)
-        {
-            animator.SetInteger("walk", 0);
-            animator.speed = 1;
-        }
-        else if (veriableJoyStick.Vertical < 0)
-        {
-            animator.SetInteger("walk", -1);
-            animator.speed = -veriableJoyStick.Vertical;
-        }
+       
 
 
 
@@ -182,5 +188,68 @@ public class CharController : MonoBehaviour
         }
 
 
+    }
+    IEnumerator attackMomentChange()
+    {
+
+
+        attackMoment = true;
+
+        rb.velocity = new Vector3(0, 0, 0);
+
+        animator.speed = 1.5f;
+        switch (attackCount)
+        {
+            case 0:
+
+                animator.Play("Attack01_SwordAndShiled");
+                attackCount++;
+                break;
+            case 1:
+                animator.Play("Attack02_SwordAndShiled");
+                attackCount++;
+                break;
+            case 2:
+                animator.Play("Attack03_SwordAndShiled");
+                attackCount = 0;
+                break;
+            default:
+                break;
+        }
+        yield return new WaitForSeconds(0.3f);
+        
+        
+        attackMoment = false;
+        animator.speed = 1;
+
+    }
+    
+    public void strongAttack()
+    {
+        if (canTurn)
+        {
+            StartCoroutine(strongAttackCounter());
+        }
+    }
+    IEnumerator strongAttackCounter()
+    {
+        canTurn = false;
+        strongAttackButton.interactable = false;
+        animator.SetInteger("attack", 5);
+        yield return new WaitForSeconds(5);
+        animator.SetInteger("attack", 0);
+        yield return new WaitForSeconds(15);
+        strongAttackButton.interactable = true;
+        canTurn = true;
+    }
+    public void attackAnimation()
+    {
+        if (!attackMoment && animator.GetInteger("attack") ==0)
+        {
+            StartCoroutine(attackMomentChange());
+
+        }
+
+        
     }
 }
