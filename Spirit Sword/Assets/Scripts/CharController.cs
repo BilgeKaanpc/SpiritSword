@@ -12,6 +12,7 @@ public class CharController : MonoBehaviour
     private float yAngle = 0.0f;
     private float xAngTemp = 0.0f; //temp variable for angle
     private float yAngTemp = 0.0f;
+    [SerializeField] GameObject sword;
     public static bool isTouch = true;
     int attackCount = 0;
     bool canTurn = true;
@@ -21,6 +22,8 @@ public class CharController : MonoBehaviour
     [SerializeField] float doubleJumpPower;
 
     [SerializeField] Animator animator;
+
+    public static int healt;
 
     public GameObject head;
     bool attackMoment = false;
@@ -38,6 +41,8 @@ public class CharController : MonoBehaviour
     bool isGround = false;
     void Start()
     {
+        sword.GetComponent<BoxCollider>().enabled = false;
+        healt = 100;
         //Initialization our angles of camera
         xAngle = 0.0f;
         yAngle = 0.0f;
@@ -221,6 +226,7 @@ public class CharController : MonoBehaviour
 
 
         attackMoment = true;
+        sword.GetComponent<BoxCollider>().enabled = true;
 
         rb.velocity = new Vector3(0, 0, 0);
 
@@ -244,8 +250,8 @@ public class CharController : MonoBehaviour
                 break;
         }
         yield return new WaitForSeconds(0.3f);
-        
-        
+
+        sword.GetComponent<BoxCollider>().enabled = false;
         attackMoment = false;
         animator.speed = 1;
 
@@ -263,9 +269,11 @@ public class CharController : MonoBehaviour
     {
         canTurn = false;
         strongAttackButton.interactable = false;
+        sword.GetComponent<BoxCollider>().enabled = true;
         animator.SetInteger("attack", 5);
         yield return new WaitForSeconds(5);
         animator.SetInteger("attack", 0);
+        sword.GetComponent<BoxCollider>().enabled = false;
         jumpController.canJump = true;
         yield return new WaitForSeconds(15);
         strongAttackButton.interactable = true;
@@ -275,6 +283,7 @@ public class CharController : MonoBehaviour
     {
         if (!attackMoment && animator.GetInteger("attack") ==0 &&  jumpController.canJump)
         {
+
             StartCoroutine(attackMomentChange());
 
         }

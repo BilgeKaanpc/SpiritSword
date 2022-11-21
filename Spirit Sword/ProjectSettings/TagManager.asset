@@ -6,6 +6,9 @@ TagManager:
   tags:
   - groundController
   - Ground
+  - lvl1Axe
+  - Skeleton_lvl1
+  - sword
   layers:
   - Default
   - TransparentFX
