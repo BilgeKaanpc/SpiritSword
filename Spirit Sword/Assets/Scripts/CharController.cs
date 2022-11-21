@@ -16,6 +16,9 @@ public class CharController : MonoBehaviour
     int attackCount = 0;
     bool canTurn = true;
     public Button strongAttackButton;
+    bool doubleJump = false;
+    [SerializeField] float jumpPower;
+    [SerializeField] float doubleJumpPower;
 
     [SerializeField] Animator animator;
 
@@ -32,6 +35,7 @@ public class CharController : MonoBehaviour
     public Transform tr;
     Vector3 oldPosition;
     Vector3 direction;
+    bool isGround = false;
     void Start()
     {
         //Initialization our angles of camera
@@ -45,10 +49,12 @@ public class CharController : MonoBehaviour
         if (!attackMoment)
         {
             direction = tr.forward * veriableJoyStick.Vertical + tr.right * veriableJoyStick.Horizontal;
-            rb.velocity = direction * speed * Time.fixedDeltaTime;
+            rb.velocity = new Vector3(direction.x * speed * Time.fixedDeltaTime, rb.velocity.y, direction.z * speed * Time.fixedDeltaTime);
+            //rb.velocity = direction * speed * Time.fixedDeltaTime;
         }
         // z ileri geri
         // x sag sol
+      
 
         if (direction != stop)
             {
@@ -60,6 +66,27 @@ public class CharController : MonoBehaviour
             }
         
         
+    }
+   
+    public void Jump()
+    {
+        if (!attackMoment && jumpController.canJump && animator.GetInteger("attack") == 0)
+        {
+
+            animator.Play("JumpStart_Normal_InPlace_SwordAndShield");
+            doubleJump = true;
+            rb.velocity = new Vector3(rb.velocity.x, 1f * jumpPower, rb.velocity.z);
+            
+        }else if (doubleJump)
+        {
+            animator.Play("JumpAir_Spin_InPlace_SwordAndShield");
+
+            rb.velocity = new Vector3(rb.velocity.x, 1f * jumpPower, rb.velocity.z);
+
+            doubleJump = false;
+        }
+
+
     }
     public void StopAnimation()
     {
@@ -226,8 +253,9 @@ public class CharController : MonoBehaviour
     
     public void strongAttack()
     {
-        if (canTurn)
+        if (canTurn )
         {
+            jumpController.canJump = false;
             StartCoroutine(strongAttackCounter());
         }
     }
@@ -238,13 +266,14 @@ public class CharController : MonoBehaviour
         animator.SetInteger("attack", 5);
         yield return new WaitForSeconds(5);
         animator.SetInteger("attack", 0);
+        jumpController.canJump = true;
         yield return new WaitForSeconds(15);
         strongAttackButton.interactable = true;
         canTurn = true;
     }
     public void attackAnimation()
     {
-        if (!attackMoment && animator.GetInteger("attack") ==0)
+        if (!attackMoment && animator.GetInteger("attack") ==0 &&  jumpController.canJump)
         {
             StartCoroutine(attackMomentChange());
 
