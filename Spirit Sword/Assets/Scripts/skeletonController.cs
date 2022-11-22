@@ -15,13 +15,13 @@ public class skeletonController : MonoBehaviour
     [SerializeField] GameObject axe;
     [SerializeField] int givenXp;
     [SerializeField] Image healtBar;
-    [SerializeField] Canvas canvas;
+    [SerializeField] public Canvas canvas;
     float followX, followZ, distance;
     bool canHit = true;
     public float healt;
     float maxHealt;
     Transform hero;
-    bool isAlive = true;
+    public bool isAlive = true;
     public bool canLook = false;
     // Start is called before the first frame update
     void Start()
@@ -50,6 +50,10 @@ public class skeletonController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (healt <= 0)
+        {
+            healt = 0;
+        }
         if (isAlive)
         {
             if (canLook)
@@ -99,22 +103,6 @@ public class skeletonController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "sword")
-        {
-            if(healt <= 0)
-            {
-                animator.Play("SkeletonOutlaw@Dead00");
-
-                StartCoroutine(death());
-                healt = 0;
-                canvas.enabled = false;
-                
-            }
-            else
-            {
-                animator.Play("SkeletonOutlaw@Damage00");
-
-            }
-        }
+       
     }
 }
