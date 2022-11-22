@@ -14,11 +14,7 @@ public class lvl1Axe : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
     IEnumerator attackWait()
     {
         yield return new WaitForSeconds(0.2f);

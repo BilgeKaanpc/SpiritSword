@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class skeletonController : MonoBehaviour
@@ -10,16 +11,22 @@ public class skeletonController : MonoBehaviour
     Animator animator;
     [SerializeField] float followSpeed;
     [SerializeField] int power;
-    [SerializeField] TextMeshPro healtText;
+    [SerializeField] TextMeshProUGUI healtText;
     [SerializeField] GameObject axe;
+    [SerializeField] int givenXp;
+    [SerializeField] Image healtBar;
+    [SerializeField] Canvas canvas;
     float followX, followZ, distance;
     bool canHit = true;
-    public int healt;
+    public float healt;
+    float maxHealt;
     Transform hero;
     bool isAlive = true;
+    public bool canLook = false;
     // Start is called before the first frame update
     void Start()
     {
+        maxHealt = healt;
         axe.GetComponent<BoxCollider>().enabled = false;
 
         hero = GameObject.Find("MainCharacter").transform;
@@ -45,36 +52,40 @@ public class skeletonController : MonoBehaviour
     {
         if (isAlive)
         {
-
-            var lookPos = hero.position - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
-            var direction = tr.forward + tr.right;
-            distance = Vector3.Distance(transform.position, hero.position);
-
-            if (distance < 2 && canHit)
+            if (canLook)
             {
-                canHit = false;
-                animator.Play("SkeletonOutlaw@Attack01");
-                StartCoroutine(attackDration());
-                rb.velocity = new Vector3(0, 0, 0);
-            }
-            if (distance > 1.7)
-            {
-                rb.velocity = new Vector3(lookPos.x * followSpeed * Time.fixedDeltaTime, rb.velocity.y, lookPos.z * followSpeed * Time.fixedDeltaTime);
+                healtBar.fillAmount = healt / maxHealt;
+                var lookPos = hero.position - transform.position;
+                lookPos.y = 0;
+                var rotation = Quaternion.LookRotation(lookPos);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
+                var direction = tr.forward + tr.right;
+                distance = Vector3.Distance(transform.position, hero.position);
 
-            }
+                if (distance < 2 && canHit)
+                {
+                    canHit = false;
+                    animator.Play("SkeletonOutlaw@Attack01");
+                    StartCoroutine(attackDration());
+                    rb.velocity = new Vector3(0, 0, 0);
+                }
+                if (distance > 1.7)
+                {
+                    rb.velocity = new Vector3(lookPos.x * followSpeed * Time.fixedDeltaTime, rb.velocity.y, lookPos.z * followSpeed * Time.fixedDeltaTime);
 
-            if (rb.velocity.magnitude > 1)
-            {
-                animator.SetInteger("walk", 1);
-            }
-            else
-            {
-                animator.SetInteger("walk", 0);
+                }
+
+                if (rb.velocity.magnitude > 1)
+                {
+                    animator.SetInteger("walk", 1);
+                }
+                else
+                {
+                    animator.SetInteger("walk", 0);
+                }
             }
         }
+           
         
         //tr.LookAt(hero);
     }
@@ -90,11 +101,13 @@ public class skeletonController : MonoBehaviour
     {
         if(other.gameObject.tag == "sword")
         {
-            if(healt < 0)
+            if(healt <= 0)
             {
                 animator.Play("SkeletonOutlaw@Dead00");
 
                 StartCoroutine(death());
+                healt = 0;
+                canvas.enabled = false;
                 
             }
             else

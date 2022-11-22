@@ -269,6 +269,7 @@ public class CharController : MonoBehaviour
     {
         canTurn = false;
         strongAttackButton.interactable = false;
+        animator.speed = 1;
         sword.GetComponent<BoxCollider>().enabled = true;
         animator.SetInteger("attack", 5);
         yield return new WaitForSeconds(5);
