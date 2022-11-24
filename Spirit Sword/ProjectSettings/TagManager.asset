@@ -9,6 +9,7 @@ TagManager:
   - lvl1Axe
   - Skeleton_lvl1
   - sword
+  - health
   layers:
   - Default
   - TransparentFX

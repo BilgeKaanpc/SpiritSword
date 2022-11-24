@@ -7,19 +7,54 @@ public class lvl1Axe : MonoBehaviour
     [SerializeField] int axePower;
     bool canHit = true;
     Animator heroAnimator;
+    GameObject mainCharacter;
     // Start is called before the first frame update
     void Start()
     {
-        heroAnimator = GameObject.Find("MainCharacter").GetComponent<Animator>();
+        mainCharacter = GameObject.Find("MainCharacter");
+        heroAnimator = mainCharacter.GetComponent<Animator>();
 
     }
 
    
-    IEnumerator attackWait()
+    IEnumerator attackWait(GameObject other)
     {
-        yield return new WaitForSeconds(0.2f);
-        heroAnimator.Play("GetHit01_SwordAndShield");
 
+        canHit = false;
+        yield return new WaitForSeconds(0.2f);
+        if (CharController.canHittable)
+        {
+            if (mainCharacter.GetComponent<CharController>().isAlive)
+            {
+                heroAnimator.Play("GetHit01_SwordAndShield");
+                if (0 >= CharController.healt - axePower)
+                {
+                    CharController.healt = 0;
+                    mainCharacter.GetComponent<CharController>().isAlive = false;
+                    if(0 >=  PlayerPrefs.GetFloat("XP") - (PlayerPrefs.GetInt("Level") * 10))
+                    {
+                        PlayerPrefs.SetFloat("XP", 0);
+                    }
+                    else
+                    {
+                        PlayerPrefs.SetFloat("XP", PlayerPrefs.GetFloat("XP") - (PlayerPrefs.GetInt("Level") * 10));
+
+                    }
+                    GameObject xpReset = GameObject.Find("LevelController");
+                    xpReset.GetComponent<levelController>().xpText.text = PlayerPrefs.GetFloat("XP") + "/" + xpReset.GetComponent<levelController>().xp[PlayerPrefs.GetInt("Level") - 1];
+                    xpReset.GetComponent<levelController>().xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / xpReset.GetComponent<levelController>().xp[PlayerPrefs.GetInt("Level") - 1];
+                    GetComponentInParent<Animator>().Play("SkeletonOutlaw@Idle02");
+                    heroAnimator.Play("Die01_SwordAndShield");
+                }
+                else
+                {
+                    CharController.healt -= axePower;
+
+                }
+                StartCoroutine(other.GetComponent<CharController>().canheal());
+            }
+            
+        }
         yield return new WaitForSeconds(0.7f);
         canHit = true;
     }
@@ -29,11 +64,7 @@ public class lvl1Axe : MonoBehaviour
         {
             if (canHit)
             {
-
-                canHit = false;
-                CharController.healt -= axePower;
-                Debug.Log("Hero: " + CharController.healt);
-                StartCoroutine(attackWait());
+                StartCoroutine(attackWait(other.gameObject));
             }
         }
     }

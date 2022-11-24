@@ -13,7 +13,7 @@ public class skeletonController : MonoBehaviour
     [SerializeField] int power;
     [SerializeField] TextMeshProUGUI healtText;
     [SerializeField] GameObject axe;
-    [SerializeField] int givenXp;
+    [SerializeField] public float givenXp;
     [SerializeField] Image healtBar;
     [SerializeField] public Canvas canvas;
     float followX, followZ, distance;
@@ -50,54 +50,70 @@ public class skeletonController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (hero.GetComponent<CharController>().isAlive){
+            if (isAlive)
+            {
+                if (canLook)
+                {
+                    healtBar.fillAmount = healt / maxHealt;
+                    var lookPos = hero.position - transform.position;
+                    lookPos.y = 0;
+                    var rotation = Quaternion.LookRotation(lookPos);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
+                    var direction = tr.forward + tr.right;
+                    distance = Vector3.Distance(transform.position, hero.position);
+
+                    if (distance < 2 && canHit)
+                    {
+                        canHit = false;
+                        animator.Play("SkeletonOutlaw@Attack01");
+                        StartCoroutine(attackDration());
+                        rb.velocity = new Vector3(0, 0, 0);
+                    }
+                    if (distance > 1.7)
+                    {
+                        rb.velocity = new Vector3(lookPos.x * followSpeed * Time.fixedDeltaTime, rb.velocity.y, lookPos.z * followSpeed * Time.fixedDeltaTime);
+
+                    }
+
+                    if (rb.velocity.magnitude > 1)
+                    {
+                        animator.SetInteger("walk", 1);
+                    }
+                    else
+                    {
+                        animator.SetInteger("walk", 0);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (!GameObject.Find("MainCharacter").GetComponent<CharController>().restart.activeInHierarchy)
+            {
+                StartCoroutine(win());
+            }
+        }
         if (healt <= 0)
         {
             healt = 0;
         }
-        if (isAlive)
-        {
-            if (canLook)
-            {
-                healtBar.fillAmount = healt / maxHealt;
-                var lookPos = hero.position - transform.position;
-                lookPos.y = 0;
-                var rotation = Quaternion.LookRotation(lookPos);
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
-                var direction = tr.forward + tr.right;
-                distance = Vector3.Distance(transform.position, hero.position);
-
-                if (distance < 2 && canHit)
-                {
-                    canHit = false;
-                    animator.Play("SkeletonOutlaw@Attack01");
-                    StartCoroutine(attackDration());
-                    rb.velocity = new Vector3(0, 0, 0);
-                }
-                if (distance > 1.7)
-                {
-                    rb.velocity = new Vector3(lookPos.x * followSpeed * Time.fixedDeltaTime, rb.velocity.y, lookPos.z * followSpeed * Time.fixedDeltaTime);
-
-                }
-
-                if (rb.velocity.magnitude > 1)
-                {
-                    animator.SetInteger("walk", 1);
-                }
-                else
-                {
-                    animator.SetInteger("walk", 0);
-                }
-            }
-        }
+       
            
         
         //tr.LookAt(hero);
+    }
+    IEnumerator win()
+    {
+        animator.Play("SkeletonOutlaw@Idle01 0");
+        yield return new WaitForSeconds(2);
     }
     IEnumerator death()
     {
         isAlive = false;
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         rb.constraints = RigidbodyConstraints.FreezePosition;
+        
         yield return new WaitForSeconds(1);
         animator.enabled = false;
     }
