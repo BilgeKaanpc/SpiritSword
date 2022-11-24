@@ -1,41 +1,287 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class ManuController : MonoBehaviour
 {
+   
+
+    [SerializeField] GameObject homePanel;
+    [SerializeField] GameObject equipmentPanel;
+    [SerializeField] GameObject skillsPanel;
+    [SerializeField] GameObject mapsPanel;
+    [SerializeField] GameObject cam;
+    int position = 0;
+
+    public List<float> xp;
+
+
+    //Texts
+    [SerializeField] TextMeshProUGUI lvlText;
+    [SerializeField] TextMeshProUGUI expText;
+    [SerializeField] TextMeshProUGUI totalHealtText;
+    [SerializeField] TextMeshProUGUI totalDamageText;
+    [SerializeField] TextMeshProUGUI regenText;
+    [SerializeField] TextMeshProUGUI speedText;
+    [SerializeField] TextMeshProUGUI skillPointsText;
+    [SerializeField] TextMeshProUGUI totalHealtSourceText;
+    [SerializeField] TextMeshProUGUI totalDamageourceText;
+    [SerializeField] TextMeshProUGUI regenourceText;
+    [SerializeField] TextMeshProUGUI speedsourceText;
+
+
+    //Bars
+    [SerializeField] Image xpBar;
+    [SerializeField] Image healthBar;
+    [SerializeField] Image damageBar;
+    [SerializeField] Image regenBar;
+    [SerializeField] Image speedBar;
+
+
+    //Upgrade Buttons
+
+    [SerializeField] Button healthButton;
+    [SerializeField] Button damageButton;
+    [SerializeField] Button regenButton;
+    [SerializeField] Button speedButton;
+
+    //max Values
+    float maxSpeedLvl = 100;
+    float maxRegenLvl = 13f;
+    float maxHealthLvl = 37;
+    float maxDamageLvl = 30;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        xp = new List<float>()
+        {
+            100,200,400,800,1600
+        };
+
+       
+        if (!PlayerPrefs.HasKey("Level"))
+        {
+            PlayerPrefs.SetInt("Level", 1);
+        }
+        if (!PlayerPrefs.HasKey("MaxHealt"))
+        {
+            PlayerPrefs.SetFloat("MaxHealt", 100);
+        }
+        if (!PlayerPrefs.HasKey("XP"))
+        {
+            PlayerPrefs.SetFloat("XP", 0);
+        }
+        if (!PlayerPrefs.HasKey("bonusHealthLevel"))
+        {
+            PlayerPrefs.SetFloat("bonusHealthLevel", 1);
+        }
+        if (!PlayerPrefs.HasKey("speed"))
+        {
+            PlayerPrefs.SetFloat("speed", 0);   
+        }
+        if (!PlayerPrefs.HasKey("regen"))
+        {
+            PlayerPrefs.SetFloat("regen", 0f);
+        }
+        if (!PlayerPrefs.HasKey("bonusDamageLevel"))
+        {
+            PlayerPrefs.SetFloat("bonusDamageLevel", 1);
+        }
+        if (!PlayerPrefs.HasKey("skillPoints"))
+        {
+            PlayerPrefs.SetInt("skillPoints", 100);
+        }
+
+
+
+        UpgradeAllSkill();
+
+
+    }
+
+    public void UpgradeAllSkill()
+    {
+        lvlText.text = PlayerPrefs.GetInt("Level").ToString();
+        expText.text = PlayerPrefs.GetFloat("XP") + "/" + xp[PlayerPrefs.GetInt("Level") - 1];
+        totalHealtText.text = (PlayerPrefs.GetFloat("MaxHealt") + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")))).ToString();
+        totalDamageText.text = (8 + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"))).ToString();
+        regenText.text = (1.5f - (PlayerPrefs.GetFloat("regen")/10)).ToString();
+        speedText.text = (250 + PlayerPrefs.GetFloat("speed")).ToString();
+        skillPointsText.text = PlayerPrefs.GetInt("skillPoints").ToString();
+        totalHealtSourceText.text = "(" + PlayerPrefs.GetFloat("MaxHealt") + "/" + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel"))) + ")";
+        totalDamageourceText.text = "(8/" + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"))+")";
+        regenourceText.text = "1.5/sn - " + (PlayerPrefs.GetFloat("regen")/10) + "/sn";
+        speedsourceText.text = "(250 + " + PlayerPrefs.GetFloat("speed") + ")";
+
+        if (PlayerPrefs.GetFloat("bonusHealthLevel")-1 != 0)
+        {
+            healthBar.fillAmount = (PlayerPrefs.GetFloat("bonusHealthLevel")-1) / maxHealthLvl;
+        }
+        if (PlayerPrefs.GetFloat("speed") != 0)
+        {
+            speedBar.fillAmount = PlayerPrefs.GetFloat("speed") / maxSpeedLvl ;
+        }
+        if (PlayerPrefs.GetFloat("regen") != 0)
+        {
+            regenBar.fillAmount = PlayerPrefs.GetFloat("regen") / maxRegenLvl;
+        }
+        if (PlayerPrefs.GetFloat("bonusDamageLevel") != 0)
+        {
+            damageBar.fillAmount = (PlayerPrefs.GetFloat("bonusDamageLevel")-1) / maxDamageLvl  ;
+        }
+        if (PlayerPrefs.GetFloat("XP") != 0)
+        {
+            xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / xp[PlayerPrefs.GetInt("Level")-1];
+        }
+
+        if (PlayerPrefs.GetInt("skillPoints") ==0)
+        {
+            ButtonActive(false);
+        }
+        else
+        {
+            ButtonActive(true);
+        }
+
+        if (maxHealthLvl == PlayerPrefs.GetFloat("bonusHealthLevel")-1)
+        {
+            healthButton.interactable = false;
+        }
+        if (maxDamageLvl == PlayerPrefs.GetFloat("bonusDamageLevel")-1)
+        {
+            damageButton.interactable = false;
+        }
+        if (maxRegenLvl == PlayerPrefs.GetFloat("regen"))
+        {
+            regenButton.interactable = false;
+        }
+        if (maxSpeedLvl == PlayerPrefs.GetFloat("speed"))
+        {
+            speedButton.interactable = false;
+        }
+
+    }
+
+    void ButtonActive(bool activeOr)
+    {
+        healthButton.interactable = activeOr;
+        damageButton.interactable = activeOr;
+        regenButton.interactable = activeOr;
+        speedButton.interactable = activeOr;
+
+    }
+
+    public void UpgradeHealth()
+    {
+        PlayerPrefs.SetFloat("bonusHealthLevel", PlayerPrefs.GetFloat("bonusHealthLevel") + 1);
+        PlayerPrefs.SetInt("skillPoints", PlayerPrefs.GetInt("skillPoints") - 1);
+        Debug.Log((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) / maxHealthLvl);
+        UpgradeAllSkill();
+    }
+    public void UpgradeDamage()
+    {
+        PlayerPrefs.SetFloat("bonusDamageLevel", PlayerPrefs.GetFloat("bonusDamageLevel") + 1);
+        PlayerPrefs.SetInt("skillPoints", PlayerPrefs.GetInt("skillPoints") - 1);
+        UpgradeAllSkill();
+    }
+    public void UpgradeRegen()
+    {
+        PlayerPrefs.SetFloat("regen", PlayerPrefs.GetFloat("regen") + 1f);
+        PlayerPrefs.SetInt("skillPoints", PlayerPrefs.GetInt("skillPoints") - 1);
+        UpgradeAllSkill();
+    }
+    public void UpgradeSpeed()
+    {
+        PlayerPrefs.SetFloat("speed", PlayerPrefs.GetFloat("speed") + 10);
+        PlayerPrefs.SetInt("skillPoints", PlayerPrefs.GetInt("skillPoints") - 1);
+        UpgradeAllSkill();
+    }
+
+
+
+    public void goHome()
+    {
+        StartCoroutine(Main());
+    }
+    public void goEquipmans()
+    {
+        StartCoroutine(Equipmans());
+    }
+    public void goSkills()
+    {
+        StartCoroutine(Skills());
+    }
+    public void goMap()
+    {
+        SceneManager.LoadScene(1);
+       // StartCoroutine(Map());
+    }
+
+    public void quit()
+    {
+        Application.Quit();
+    }
     //Camera Positions
     // main 0.07 - 1.8 - 6.12 / 9.7 - 28.5 - 0
     // Equipmans 2 - 1.7 - 0.3 / 14 - 135 - 0
     // Settings 0.1 - 1.5 - 1.6 / 2 - 180 - 0
     // Map -1.7 - 3 - 0 / 50 - 270 - 0
-
-    // Start is called before the first frame update
-    void Start()
+    private void FixedUpdate()
     {
-        
-    }
+        switch (position)
+        {
+            case 1:
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+                camMove(new Vector3(1.8f, 1.7f, 0.3f) , Quaternion.Euler(14,135,0));
+                break;
+            case 2:
+                camMove(new Vector3(0.1f, 1.5f, 1.6f), Quaternion.Euler(2, 180, 0));
+                break;
+            case 3:
+                camMove(new Vector3(-1.7f, 3f, 0f), Quaternion.Euler(50, 270, 0));
+                break;
+            default:
+                camMove(new Vector3(0.07f,1.8f,6.12f), Quaternion.Euler(9.7f, 28.5f, 0));
+                break;
+        }
     }
+    public void camMove(Vector3 target,Quaternion rotationTarget) {
+        cam.transform.position = Vector3.Lerp(cam.transform.position, target, Time.deltaTime * 10);
 
+        cam.transform.rotation = Quaternion.RotateTowards(cam.transform.rotation, rotationTarget, Time.deltaTime * 100);
+    }
     IEnumerator Main()
     {
-        yield return new WaitForSeconds(1);
+        position = 0;
+        equipmentPanel.SetActive(false);
+        skillsPanel.SetActive(false);
+        mapsPanel.SetActive(false);
+        yield return new WaitForSeconds(1.2f);
+        homePanel.SetActive(true);
     }
     IEnumerator Equipmans()
     {
-        yield return new WaitForSeconds(1);
+        position = 1;
+        homePanel.SetActive(false);
+        yield return new WaitForSeconds(1.2f);
+        equipmentPanel.SetActive(true);
     }
-    IEnumerator Sttings()
+    IEnumerator Skills()
     {
-        yield return new WaitForSeconds(1);
+        position = 2;
+        homePanel.SetActive(false);
+        yield return new WaitForSeconds(1.5f);
+        skillsPanel.SetActive(true);
     }
     IEnumerator Map()
     {
-        yield return new WaitForSeconds(1);
+        position = 3;
+        homePanel.SetActive(false);
+        yield return new WaitForSeconds(1.2f);
+        mapsPanel.SetActive(true);
     }
 }

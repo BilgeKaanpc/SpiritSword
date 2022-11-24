@@ -18,6 +18,7 @@ public class skeletonController : MonoBehaviour
     [SerializeField] public Canvas canvas;
     float followX, followZ, distance;
     bool canHit = true;
+    int hitDuration = 0;
     public float healt;
     float maxHealt;
     Transform hero;
@@ -42,11 +43,26 @@ public class skeletonController : MonoBehaviour
     }
     IEnumerator attackDration()
     {
+        /*  canHealable += 5;
+        while (canHealable > 0)
+        {
+            canHealable -= 1;
+            yield return new WaitForSeconds(1);
+        }*/
             axe.GetComponent<BoxCollider>().enabled = true;
         yield return new WaitForSeconds(1);
 
         axe.GetComponent<BoxCollider>().enabled = false;
         canHit = true;
+    }
+    //hasat aldýktan sonra beklemesi
+    public IEnumerator noDamage()
+    {
+        hitDuration ++;
+       
+            yield return new WaitForSeconds(1);
+            hitDuration--;
+       
     }
     private void FixedUpdate()
     {
@@ -63,7 +79,7 @@ public class skeletonController : MonoBehaviour
                     var direction = tr.forward + tr.right;
                     distance = Vector3.Distance(transform.position, hero.position);
 
-                    if (distance < 2 && canHit)
+                    if (distance < 2 && canHit && hitDuration == 0)
                     {
                         canHit = false;
                         animator.Play("SkeletonOutlaw@Attack01");

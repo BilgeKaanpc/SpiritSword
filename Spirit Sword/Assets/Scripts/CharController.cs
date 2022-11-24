@@ -41,7 +41,7 @@ public class CharController : MonoBehaviour
 
     Vector3 stop = new Vector3(0, 0, 0);
     // joystik
-    public float speed;
+    float speed;
     public FixedJoystick veriableJoyStick;
     public Rigidbody rb;
     public Transform tr;
@@ -49,22 +49,23 @@ public class CharController : MonoBehaviour
     Vector3 direction;
     float duration = 0;
     float fullDuration = 0;
+
+    //Formules
+    //Bonus Damage Formul (n-1).n   -  n = PLayerPrefs.getint("damage");
+    // bonus health Formul (5/2) * ((n-1)n)      n  = PLayerPrefs.getint("health");
+    // speed formul  250 + PLayerPrefs.getFloat("speed")    -      pref += 10;
+    //  regen formul  1.5f - PlayerPrefs.getFloat("speed")     -       pref+= 0.1f;  
+
+
+    public void returnMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
     void Start()
     {
-        if (!PlayerPrefs.HasKey("Level"))
-        {
-            PlayerPrefs.SetInt("Level", 1);
-        }
-        if (!PlayerPrefs.HasKey("MaxHealt"))
-        {
-            PlayerPrefs.SetInt("MaxHealt", 100);
-        }
-        if (!PlayerPrefs.HasKey("XP"))
-        {
-            PlayerPrefs.SetFloat("XP", 0);
-        }
+        speed = 250 +  + PlayerPrefs.GetFloat("speed");
         sword.GetComponent<BoxCollider>().enabled = false;
-        healt = PlayerPrefs.GetInt("MaxHealt");
+        healt = PlayerPrefs.GetFloat("MaxHealt") + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")));
 
         lvlText.text = PlayerPrefs.GetInt("Level").ToString();
         maxHealth = healt;
@@ -145,13 +146,13 @@ public class CharController : MonoBehaviour
        {
            if (canHealable == 0)
            {
-                if (healt < 100)
+                if (healt < maxHealth)
                 {
                     healt++;
                 }
            }
 
-           yield return new WaitForSeconds(0.5f);
+           yield return new WaitForSeconds(1.5f - (PlayerPrefs.GetFloat("regen")/10));
         }
         
         
@@ -183,7 +184,7 @@ public class CharController : MonoBehaviour
     }
     public void StopAnimation()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
     void Update()
     {
