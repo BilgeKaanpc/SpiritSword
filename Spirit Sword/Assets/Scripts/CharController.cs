@@ -50,6 +50,8 @@ public class CharController : MonoBehaviour
     float duration = 0;
     float fullDuration = 0;
 
+    [SerializeField] GameObject enemy;
+
     //Formules
     //Bonus Damage Formul (n-1).n   -  n = PLayerPrefs.getint("damage");
     // bonus health Formul (5/2) * ((n-1)n)      n  = PLayerPrefs.getint("health");
@@ -61,8 +63,19 @@ public class CharController : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void Spawn()
+    {
+        Vector3 spawnDirection = Random.insideUnitCircle.normalized * 30f;
+        Debug.Log(Random.insideUnitCircle.normalized);
+        Vector3 newSpawnArea = new Vector3(spawnDirection.x, 0, spawnDirection.y);
+        Vector3 spawnPoint = transform.position + newSpawnArea;
+        Quaternion rotation = enemy.transform.rotation;
+        GameObject enemySpawn = Instantiate(enemy, spawnPoint, rotation);
+    }
     void Start()
     {
+        InvokeRepeating(nameof(Spawn), 2f, 2f);
         speed = 250 +  + PlayerPrefs.GetFloat("speed");
         sword.GetComponent<BoxCollider>().enabled = false;
         healt = PlayerPrefs.GetFloat("MaxHealt") + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")));
