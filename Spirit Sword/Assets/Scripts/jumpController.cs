@@ -29,8 +29,19 @@ public class jumpController : MonoBehaviour
     {
         if (other.gameObject.tag == "Ground")
         {
-            animator.Play("JumpEnd_Normal_InPlace_SwordAndShield");
-            animator.SetInteger("walk", 0);
+            if (!canJump)
+            {
+                animator.Play("JumpEnd_Normal_InPlace_SwordAndShield");
+                animator.SetInteger("walk", 0);
+                canJump = true;
+            }
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Ground")
+        {
+            
             canJump = true;
         }
     }

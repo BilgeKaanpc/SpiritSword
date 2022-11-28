@@ -217,8 +217,12 @@ public class ManuController : MonoBehaviour
     }
     public void goMap()
     {
+       StartCoroutine(Map());
+    }
+    public void loadMap_1()
+    {
+
         SceneManager.LoadScene(1);
-       // StartCoroutine(Map());
     }
 
     public void quit()

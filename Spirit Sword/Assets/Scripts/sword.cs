@@ -48,11 +48,13 @@ public class sword : MonoBehaviour
             enemy.GetComponent<skeletonController>().healt = 0;
             enemy.GetComponent<skeletonController>().canvas.enabled = false;
             enemy.GetComponent<CapsuleCollider>().enabled = false;
-        }
-        enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        yield return new WaitForSeconds(1);
+            enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            yield return new WaitForSeconds(1);
 
-        enemy.GetComponent<Animator>().enabled = false;
+            enemy.GetComponent<Animator>().enabled = false;
+            yield return new WaitForSeconds(3);
+            Destroy(enemy);
+        }
         
     }
     private void OnTriggerEnter(Collider other)

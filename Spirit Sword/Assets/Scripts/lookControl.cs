@@ -22,4 +22,11 @@ public class lookControl : MonoBehaviour
             GetComponentInParent<skeletonController>().canLook = true;
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            GetComponentInParent<skeletonController>().canLook = false;
+        }
+    }
 }

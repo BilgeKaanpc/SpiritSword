@@ -2323,7 +2323,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4200515242105479623}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 50
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -2357,11 +2357,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b30f91b6ffc3184db007652d5dd290e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followSpeed: 30
+  followSpeed: 100
   power: 0
   healtText: {fileID: 3635744974117820052}
   axe: {fileID: 4199709102475386913}
-  givenXp: 0
+  givenXp: 8
   healtBar: {fileID: 3635744973721749139}
   canvas: {fileID: 3635744974096218191}
   healt: 100

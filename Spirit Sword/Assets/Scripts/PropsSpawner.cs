@@ -6,6 +6,8 @@ public class PropsSpawner : MonoBehaviour
 {
     [SerializeField] List<GameObject> propsList = new List<GameObject>();
     [SerializeField] List<GameObject> greenList = new List<GameObject>();
+    public static List<GameObject> areaList = new List<GameObject>();
+    public  List<GameObject> propList = new List<GameObject>();
     [SerializeField] GameObject area;
     int spawnCount = 70;
     int flowers = 300;
@@ -13,13 +15,18 @@ public class PropsSpawner : MonoBehaviour
     Transform playerTransform;
     float distanceX, distanceZ;
     bool canCreate = true;
+    bool destroyable = false;
     // Start is called before the first frame update
     void Start()
     {
+        areaList.Add(gameObject);
         player = GameObject.Find("MainCharacter");
         playerTransform = player.transform;
 
-        Debug.Log(Mathf.Abs(Mathf.Round(34f/50f)));
+        foreach (var item in propList)
+        {
+            Destroy(item);
+        }
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -28,7 +35,8 @@ public class PropsSpawner : MonoBehaviour
 
             Quaternion newRotation = Quaternion.Euler(propsList[index].transform.rotation.x, Random.Range(0, 360), propsList[index].transform.rotation.z);
             GameObject props = Instantiate(propsList[index], spawnArea, newRotation);
-            props.transform.parent = transform;
+            props.transform.parent = gameObject.transform;
+            propList.Add(props);
         }
         for (int i = 0; i < flowers; i++)
         {
@@ -37,48 +45,92 @@ public class PropsSpawner : MonoBehaviour
 
             Quaternion newRotation = Quaternion.Euler(greenList[index].transform.rotation.x, Random.Range(0, 360), greenList[index].transform.rotation.z);
             GameObject props = Instantiate(greenList[index], spawnArea, newRotation);
-            props.transform.parent = transform;
+            props.transform.parent = gameObject.transform;
+            propList.Add(props);
         }
     }
 
+    IEnumerator canDestroy()
+    {
+        yield return new WaitForSeconds(5);
+        destroyable = true;
+    }
+    void Check(Vector3 test)
+    {
+        for (int i = 0; i < areaList.Count; i++)
+        {
+            if(areaList[i].transform.position.x == test.x && areaList[i].transform.position.z == test.z)
+            {
+                Debug.Log("Zaten var");
+                canCreate = false;
+            }
+        }
+    }
     // Update is called once per frame
     private void FixedUpdate()
     {
         distanceX = Mathf.Abs(transform.position.x - playerTransform.position.x);
         distanceZ = Mathf.Abs(transform.position.z - playerTransform.position.z);
-        if(distanceX > 75 || distanceZ > 75)
-        {
+        float distance = Vector3.Distance(transform.position, playerTransform.position);
 
-            Destroy(gameObject);
-            if (transform.position.x - playerTransform.position.x > 75 && canCreate)
+        if(distanceX > 75)
+        {
+            if (transform.position.x - playerTransform.position.x > 75)
             {
                 Vector3 newPosition = new Vector3(transform.position.x - 150, transform.position.y, transform.position.z);
-                GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
-                canCreate = false;
-                Debug.Log(gameObject.name);
+                if (canCreate)
+                {
+                    GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
+                    newArea.name = "OtoGround";
+                    canCreate = false;
+                    areaList.Remove(gameObject);
+                    Destroy(gameObject);
+                }
             }
-            else if (transform.position.x - playerTransform.position.x <= 75 && canCreate)
+            else if (transform.position.x - playerTransform.position.x <= 75)
             {
                 Vector3 newPosition = new Vector3(transform.position.x + 150, transform.position.y, transform.position.z);
-                GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
-                canCreate = false;
-                Debug.Log(gameObject.name);
-            }
-            if (transform.position.z - playerTransform.position.z > 75 && canCreate)
-            {
-                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-150);
-                GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
-                canCreate = false;
-                Debug.Log(gameObject.name);
-            }
-            else if(transform.position.z - playerTransform.position.z <= 75 && canCreate)
-            {
-                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+150);
-                GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
-                canCreate = false;
-                Debug.Log(gameObject.name);
+                if (canCreate)
+                {
+                    
+                    GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
+                    newArea.name = "OtoGround";
+                    canCreate = false;
+                    areaList.Remove(gameObject);
+                    Destroy(gameObject);
+                }
             }
 
+        }
+        if(distanceZ > 75)
+        {
+
+            if (transform.position.z - playerTransform.position.z > 75 && canCreate)
+            {
+                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z - 150);
+                if (canCreate)
+                {
+                    
+                    GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
+                    newArea.name = "OtoGround";
+                    canCreate = false;
+                    areaList.Remove(gameObject);
+                    Destroy(gameObject);
+                }
+            }
+            else if (transform.position.z - playerTransform.position.z <= 75 && canCreate)
+            {
+                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z + 150);
+                if (canCreate)
+                {
+                    
+                    GameObject newArea = Instantiate(area, newPosition, area.transform.rotation);
+                    newArea.name = "OtoGround";
+                    canCreate = false;
+                    areaList.Remove(gameObject);
+                    Destroy(gameObject);
+                }
+            }
         }
 
     }

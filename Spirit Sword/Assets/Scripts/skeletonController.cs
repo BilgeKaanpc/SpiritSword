@@ -24,9 +24,11 @@ public class skeletonController : MonoBehaviour
     Transform hero;
     public bool isAlive = true;
     public bool canLook = false;
+    bool randomWalk = true;
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(randomMove());
         maxHealt = healt;
         axe.GetComponent<BoxCollider>().enabled = false;
 
@@ -64,11 +66,32 @@ public class skeletonController : MonoBehaviour
             hitDuration--;
        
     }
+
+    IEnumerator randomMove()
+    {
+
+        yield return new WaitForSeconds(5);
+        randomWalk = false;
+
+        animator.SetInteger("walk", 0);
+    }
     private void FixedUpdate()
     {
+        if(transform.position.y < -2)
+        {
+            Destroy(gameObject);
+        }
         if (hero.GetComponent<CharController>().isAlive){
             if (isAlive)
             {
+                if (rb.velocity.magnitude > 1)
+                {
+                    animator.SetInteger("walk", 1);
+                }
+                else
+                {
+                    animator.SetInteger("walk", 0);
+                }
                 if (canLook)
                 {
                     healtBar.fillAmount = healt / maxHealt;
@@ -88,18 +111,23 @@ public class skeletonController : MonoBehaviour
                     }
                     if (distance > 1.7)
                     {
-                        rb.velocity = new Vector3(lookPos.x * followSpeed * Time.fixedDeltaTime, rb.velocity.y, lookPos.z * followSpeed * Time.fixedDeltaTime);
+                        rb.velocity = transform.forward * followSpeed * Time.deltaTime;
 
                     }
 
-                    if (rb.velocity.magnitude > 1)
-                    {
-                        animator.SetInteger("walk", 1);
-                    }
-                    else
-                    {
-                        animator.SetInteger("walk", 0);
-                    }
+                   
+                }
+            }
+            if (randomWalk)
+            {
+                rb.velocity = rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                if (rb.velocity.magnitude > 1)
+                {
+                    animator.SetInteger("walk", 1);
+                }
+                else
+                {
+                    animator.SetInteger("walk", 0);
                 }
             }
         }

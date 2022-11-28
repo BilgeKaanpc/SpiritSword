@@ -67,11 +67,10 @@ public class CharController : MonoBehaviour
     public void Spawn()
     {
         Vector3 spawnDirection = Random.insideUnitCircle.normalized * 30f;
-        Debug.Log(Random.insideUnitCircle.normalized);
         Vector3 newSpawnArea = new Vector3(spawnDirection.x, 0, spawnDirection.y);
         Vector3 spawnPoint = transform.position + newSpawnArea;
-        Quaternion rotation = enemy.transform.rotation;
-        GameObject enemySpawn = Instantiate(enemy, spawnPoint, rotation);
+        Quaternion newRotation = Quaternion.Euler(enemy.transform.rotation.x, Random.Range(0, 360), enemy.transform.rotation.z);
+        GameObject enemySpawn = Instantiate(enemy, spawnPoint, newRotation);
     }
     void Start()
     {
