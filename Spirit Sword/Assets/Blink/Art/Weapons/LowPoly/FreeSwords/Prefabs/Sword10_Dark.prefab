@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4982670292755768887}
   - component: {fileID: 8253369333151328658}
   - component: {fileID: 6155625639765777752}
+  - component: {fileID: -3298201768177560308}
   m_Layer: 0
   m_Name: Sword10_Dark
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-3298201768177560308
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5651402458575486093}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5450713, y: 1.8581562, z: 0.14330931}
+  m_Center: {x: -0.012993246, y: 1.21031, z: 0}

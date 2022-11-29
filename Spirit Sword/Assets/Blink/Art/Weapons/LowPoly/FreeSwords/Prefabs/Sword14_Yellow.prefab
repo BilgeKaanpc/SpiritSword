@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3546183286804972514}
   - component: {fileID: 475492034342227015}
   - component: {fileID: 2413294112371374221}
+  - component: {fileID: -8571820558168713607}
   m_Layer: 0
   m_Name: Sword14_Yellow
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-8571820558168713607
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4214597693441333592}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.36204413, y: 1.2756834, z: 0.110924855}
+  m_Center: {x: 0, y: 0.8229674, z: -0.000000014901161}

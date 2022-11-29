@@ -35,6 +35,8 @@ public class CharController : MonoBehaviour
     public static float healt;
     public bool isAlive = true;
 
+    [SerializeField] List<GameObject> swords = new List<GameObject>();
+
     public GameObject head;
     bool attackMoment = false;
     //Animations
@@ -64,6 +66,14 @@ public class CharController : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    public void SwordChange(int index)
+    {
+        sword.GetComponent<BoxCollider>().size = swords[index].GetComponent<BoxCollider>().size;
+        sword.GetComponent<MeshFilter>().sharedMesh = swords[index].GetComponent<MeshFilter>().sharedMesh;
+        sword.GetComponent<MeshRenderer>().sharedMaterial = swords[index].GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+
     public void Spawn()
     {
         Vector3 spawnDirection = Random.insideUnitCircle.normalized * 30f;
@@ -74,6 +84,8 @@ public class CharController : MonoBehaviour
     }
     void Start()
     {
+        SwordChange(PlayerPrefs.GetInt("Level"));
+        Debug.Log(sword.GetComponent<BoxCollider>().size);
         InvokeRepeating(nameof(Spawn), 2f, 2f);
         speed = 250 +  + PlayerPrefs.GetFloat("speed");
         sword.GetComponent<BoxCollider>().enabled = false;
@@ -96,8 +108,8 @@ public class CharController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-
-        if(healt<=0 && !restart.activeInHierarchy)
+        SwordChange(PlayerPrefs.GetInt("Level"));
+        if (healt<=0 && !restart.activeInHierarchy)
         {
             StartCoroutine(buttonActive());
         }

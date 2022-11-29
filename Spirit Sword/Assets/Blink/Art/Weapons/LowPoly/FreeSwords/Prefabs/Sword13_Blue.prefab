@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4069032608350865191}
   - component: {fileID: 1141592188437858434}
   - component: {fileID: 2896719758783413320}
+  - component: {fileID: 5999489865749512216}
   m_Layer: 0
   m_Name: Sword13_Blue
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5999489865749512216
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3689515951906905501}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.74983907, y: 1.6428096, z: 0.2017597}
+  m_Center: {x: 0.018302858, y: 1.1288897, z: 0.00023692846}

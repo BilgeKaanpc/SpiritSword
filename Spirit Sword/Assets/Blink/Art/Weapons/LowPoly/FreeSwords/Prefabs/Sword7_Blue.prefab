@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6358568393392945801}
   - component: {fileID: 8039479310580020524}
   - component: {fileID: 5221080027720417766}
+  - component: {fileID: 3516569072937745209}
   m_Layer: 0
   m_Name: Sword7_Blue
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3516569072937745209
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6013990982369288243}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.49707994, y: 1.2671726, z: 0.09957444}
+  m_Center: {x: -0.0024064332, y: 0.9233564, z: 0.0014449097}

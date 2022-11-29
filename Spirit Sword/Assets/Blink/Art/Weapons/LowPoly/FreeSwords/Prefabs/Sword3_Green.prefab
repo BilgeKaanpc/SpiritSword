@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5107622844056523971}
   - component: {fileID: 8164516496834812774}
   - component: {fileID: 6245022872318193580}
+  - component: {fileID: -6780527792672553470}
   m_Layer: 0
   m_Name: Sword3_Green
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-6780527792672553470
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596350662152064633}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.35596275, y: 1.627296, z: 0.11787979}
+  m_Center: {x: 0.00002130121, y: 1.1692879, z: 0.00000012665987}

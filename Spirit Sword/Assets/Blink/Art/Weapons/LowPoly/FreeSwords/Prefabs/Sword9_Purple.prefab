@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8414799470984261028}
   - component: {fileID: 4857277455157060097}
   - component: {fileID: 7245292712129631947}
+  - component: {fileID: 6600104112363257044}
   m_Layer: 0
   m_Name: Sword9_Purple
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6600104112363257044
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190878331159525150}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.44737184, y: 1.1491432, z: 0.116060495}
+  m_Center: {x: -0.00000011920929, y: 0.8993691, z: -0.000000029802322}

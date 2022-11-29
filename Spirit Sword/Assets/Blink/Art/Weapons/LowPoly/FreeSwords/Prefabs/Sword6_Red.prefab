@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1203856646013037602}
   - component: {fileID: 2817897293155836807}
   - component: {fileID: 72015681297995597}
+  - component: {fileID: -6711373149986038037}
   m_Layer: 0
   m_Name: Sword6_Red
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-6711373149986038037
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017372464273290904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.30196956, y: 1.3951964, z: 0.072264455}
+  m_Center: {x: -0.00015930831, y: 1.344024, z: 0.0021388792}

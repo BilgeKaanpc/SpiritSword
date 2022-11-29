@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3991268688261972187}
   - component: {fileID: 57436481298468734}
   - component: {fileID: 2821779378782960564}
+  - component: {fileID: -6481731888301464473}
   m_Layer: 0
   m_Name: Sword5_Gold
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-6481731888301464473
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4334720229974137441}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.2868778, y: 1.5091155, z: 0.10461415}
+  m_Center: {x: 0.000000029802322, y: 1.2448488, z: -0.0000054184347}

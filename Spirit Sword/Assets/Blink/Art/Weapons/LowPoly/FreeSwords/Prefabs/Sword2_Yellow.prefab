@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7044476285236031898}
   - component: {fileID: 6227592417385070143}
   - component: {fileID: 8180838231713499893}
+  - component: {fileID: -2033928966975896491}
   m_Layer: 0
   m_Name: Sword2_Yellow
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-2033928966975896491
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7676615874565401376}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.20846292, y: 1.3144994, z: 0.08547954}
+  m_Center: {x: 0.00000023841858, y: 1.0518386, z: -0.000039868057}
