@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class sword : MonoBehaviour
 {
-    [SerializeField ]float power;
+    [SerializeField ]public float power;
     // Start is called before the first frame update
     void Start()
     {
-        power = 8 + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"));
     }
 
     // Update is called once per frame
@@ -24,7 +23,7 @@ public class sword : MonoBehaviour
         PlayerPrefs.SetFloat("XP", PlayerPrefs.GetFloat("XP") + givenXp);
         Debug.Log(PlayerPrefs.GetFloat("XP"));
         lvlController.GetComponent<levelController>().nowXp = PlayerPrefs.GetFloat("XP");
-        if (lvlController.GetComponent<levelController>().xp[PlayerPrefs.GetInt("Level") - 1] <= PlayerPrefs.GetFloat("XP"))
+        if ((50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2)) <= PlayerPrefs.GetFloat("XP"))
         {
 
             PlayerPrefs.SetInt("skillPoints", PlayerPrefs.GetInt("skillPoints") + 1);
@@ -33,10 +32,12 @@ public class sword : MonoBehaviour
             PlayerPrefs.SetFloat("XP", 0);
             PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
             GameObject main = GameObject.Find("MainCharacter");
+            main.GetComponent<CharController>().LevelUp();
+            main.GetComponent<CharController>().LevelUpAnimation();
             main.GetComponent<CharController>().lvlText.text = PlayerPrefs.GetInt("Level").ToString();
         }
-        lvlController.GetComponent<levelController>().xpText.text = PlayerPrefs.GetFloat("XP") + "/" + lvlController.GetComponent<levelController>().xp[PlayerPrefs.GetInt("Level") - 1];
-        lvlController.GetComponent<levelController>().xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / lvlController.GetComponent<levelController>().xp[PlayerPrefs.GetInt("Level") - 1];
+        lvlController.GetComponent<levelController>().xpText.text = PlayerPrefs.GetFloat("XP") + "/" + (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
+        lvlController.GetComponent<levelController>().xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
     }
     IEnumerator Kill(GameObject enemy)
     {

@@ -18,6 +18,7 @@ public class ManuController : MonoBehaviour
 
     public List<float> xp;
 
+    [SerializeField] public List<float> swordsPower;
 
     //Texts
     [SerializeField] TextMeshProUGUI lvlText;
@@ -57,6 +58,60 @@ public class ManuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        swordsPower = new List<float>()
+        {
+            10,
+            13,
+            17,
+            22,
+            28, 
+            35,
+            43,
+            52,
+            62,
+            73,
+            85,
+            98,
+            112,
+            127,
+            143,
+            160,
+            178,
+            197,
+            217,
+            238,
+            260,
+            283,
+            307,
+            332,
+            358,
+            385,
+            413,
+            442,
+            472,    
+            503,
+            535,
+            568,
+            602,
+            637,
+            673,
+            710,
+            748,
+            787,
+            827,
+            868,
+            910,
+            953,
+            997,
+            1042,
+            1088,
+            1135,
+            1183,
+            1232,
+            1282,
+            1500,
+        };
+
         xp = new List<float>()
         {
             100,200,400,800,1600
@@ -69,7 +124,7 @@ public class ManuController : MonoBehaviour
         }
         if (!PlayerPrefs.HasKey("MaxHealt"))
         {
-            PlayerPrefs.SetFloat("MaxHealt", 100);
+            PlayerPrefs.SetFloat("MaxHealt", 1);
         }
         if (!PlayerPrefs.HasKey("XP"))
         {
@@ -103,17 +158,23 @@ public class ManuController : MonoBehaviour
 
     }
 
+    // 5 * (Mathf.Pow(PlayerPrefs.GetFloat("MaxHealt"),2) - PlayerPrefs.GetFloat("MaxHealt") + 20) 
+    // (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2)
+
     public void UpgradeAllSkill()
     {
+
+        string square = (Mathf.Pow((-1), PlayerPrefs.GetInt("Level") + 1)).ToString();
+        int index = (((2 * PlayerPrefs.GetInt("Level")) + int.Parse(square) + 1)) / 4;
         lvlText.text = PlayerPrefs.GetInt("Level").ToString();
-        expText.text = PlayerPrefs.GetFloat("XP") + "/" + xp[PlayerPrefs.GetInt("Level") - 1];
-        totalHealtText.text = (PlayerPrefs.GetFloat("MaxHealt") + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")))).ToString();
-        totalDamageText.text = (8 + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"))).ToString();
+        expText.text = PlayerPrefs.GetFloat("XP") + "/" + (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
+        totalHealtText.text = (5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20) + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")))).ToString();
+        totalDamageText.text = (swordsPower[index - 1] + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"))).ToString();
         regenText.text = (1.5f - (PlayerPrefs.GetFloat("regen")/10)).ToString();
         speedText.text = (250 + PlayerPrefs.GetFloat("speed")).ToString();
         skillPointsText.text = PlayerPrefs.GetInt("skillPoints").ToString();
-        totalHealtSourceText.text = "(" + PlayerPrefs.GetFloat("MaxHealt") + "/" + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel"))) + ")";
-        totalDamageourceText.text = "(8/" + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"))+")";
+        totalHealtSourceText.text = "(" + 5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20) + "/" + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel"))) + ")";
+        totalDamageourceText.text = swordsPower[index - 1] + "/" + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"))+")";
         regenourceText.text = "1.5/sn - " + (PlayerPrefs.GetFloat("regen")/10) + "/sn";
         speedsourceText.text = "(250 + " + PlayerPrefs.GetFloat("speed") + ")";
 
@@ -135,7 +196,7 @@ public class ManuController : MonoBehaviour
         }
         if (PlayerPrefs.GetFloat("XP") != 0)
         {
-            xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / xp[PlayerPrefs.GetInt("Level")-1];
+            xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
         }
 
         if (PlayerPrefs.GetInt("skillPoints") ==0)

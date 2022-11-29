@@ -77,74 +77,85 @@ public class skeletonController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(transform.position.y < -2)
+        if (!hero.GetComponent<CharController>().pause)
         {
-            Destroy(gameObject);
-        }
-        if (hero.GetComponent<CharController>().isAlive){
-            if (isAlive)
+
+
+            if (transform.position.y < -2)
             {
-                if (rb.velocity.magnitude > 1)
+                Destroy(gameObject);
+            }
+            if (hero.GetComponent<CharController>().isAlive)
+            {
+                if (isAlive)
                 {
-                    animator.SetInteger("walk", 1);
-                }
-                else
-                {
-                    animator.SetInteger("walk", 0);
-                }
-                if (canLook)
-                {
-                    healtBar.fillAmount = healt / maxHealt;
-                    var lookPos = hero.position - transform.position;
-                    lookPos.y = 0;
-                    var rotation = Quaternion.LookRotation(lookPos);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
-                    var direction = tr.forward + tr.right;
-                    distance = Vector3.Distance(transform.position, hero.position);
-
-                    if (distance < 2 && canHit && hitDuration == 0)
+                    if (rb.velocity.magnitude > 1)
                     {
-                        canHit = false;
-                        animator.Play("SkeletonOutlaw@Attack01");
-                        StartCoroutine(attackDration());
-                        rb.velocity = new Vector3(0, 0, 0);
+                        animator.SetInteger("walk", 1);
                     }
-                    if (distance > 1.7)
+                    else
                     {
-                        rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                        animator.SetInteger("walk", 0);
+                    }
+                    if (canLook)
+                    {
+                        healtBar.fillAmount = healt / maxHealt;
+                        var lookPos = hero.position - transform.position;
+                        lookPos.y = 0;
+                        var rotation = Quaternion.LookRotation(lookPos);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
+                        var direction = tr.forward + tr.right;
+                        distance = Vector3.Distance(transform.position, hero.position);
+
+                        if (distance < 2 && canHit && hitDuration == 0)
+                        {
+                            canHit = false;
+                            animator.Play("SkeletonOutlaw@Attack01");
+                            StartCoroutine(attackDration());
+                            rb.velocity = new Vector3(0, 0, 0);
+                        }
+                        if (distance > 1.7)
+                        {
+                            rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+
+                        }
+
 
                     }
-
-                   
+                }
+                if (randomWalk)
+                {
+                    rb.velocity = rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                    if (rb.velocity.magnitude > 1)
+                    {
+                        animator.SetInteger("walk", 1);
+                    }
+                    else
+                    {
+                        animator.SetInteger("walk", 0);
+                    }
                 }
             }
-            if (randomWalk)
+            else
             {
-                rb.velocity = rb.velocity = transform.forward * followSpeed * Time.deltaTime;
-                if (rb.velocity.magnitude > 1)
+                if (!GameObject.Find("MainCharacter").GetComponent<CharController>().restart.activeInHierarchy)
                 {
-                    animator.SetInteger("walk", 1);
-                }
-                else
-                {
-                    animator.SetInteger("walk", 0);
+                    StartCoroutine(win());
                 }
             }
+            if (healt <= 0)
+            {
+                healt = 0;
+            }
+
+
         }
         else
         {
-            if (!GameObject.Find("MainCharacter").GetComponent<CharController>().restart.activeInHierarchy)
-            {
-                StartCoroutine(win());
-            }
+            animator.SetInteger("walk", 0);
         }
-        if (healt <= 0)
-        {
-            healt = 0;
-        }
-       
-           
-        
+
+
         //tr.LookAt(hero);
     }
     IEnumerator win()

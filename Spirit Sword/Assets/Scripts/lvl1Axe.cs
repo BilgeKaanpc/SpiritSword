@@ -41,8 +41,8 @@ public class lvl1Axe : MonoBehaviour
 
                     }
                     GameObject xpReset = GameObject.Find("LevelController");
-                    xpReset.GetComponent<levelController>().xpText.text = PlayerPrefs.GetFloat("XP") + "/" + xpReset.GetComponent<levelController>().xp[PlayerPrefs.GetInt("Level") - 1];
-                    xpReset.GetComponent<levelController>().xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / xpReset.GetComponent<levelController>().xp[PlayerPrefs.GetInt("Level") - 1];
+                    xpReset.GetComponent<levelController>().xpText.text = PlayerPrefs.GetFloat("XP") + "/" + (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
+                    xpReset.GetComponent<levelController>().xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
                     GetComponentInParent<Animator>().Play("SkeletonOutlaw@Idle02");
                     heroAnimator.Play("Die01_SwordAndShield");
                 }

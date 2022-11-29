@@ -34,8 +34,11 @@ public class CharController : MonoBehaviour
     public static int canHealable = 0;
     public static float healt;
     public bool isAlive = true;
+    [SerializeField] GameObject newLevelPanel , plusDamageImage;
 
-    [SerializeField] List<GameObject> swords = new List<GameObject>();
+    [SerializeField] public List<Sword> swords = new List<Sword>();
+
+    [SerializeField] TextMeshProUGUI oldLevel, newLevel, plusHealth, plusDamage,swordName,newSwordText;
 
     public GameObject head;
     bool attackMoment = false;
@@ -51,8 +54,12 @@ public class CharController : MonoBehaviour
     Vector3 direction;
     float duration = 0;
     float fullDuration = 0;
-
+    [SerializeField] Transform newSwordPosition;
+    GameObject newSword;
     [SerializeField] GameObject enemy;
+    [SerializeField] GameObject mainGamePanel;
+    public bool pause = false;
+    public static int sceneCounter = 0;
 
     //Formules
     //Bonus Damage Formul (n-1).n   -  n = PLayerPrefs.getint("damage");
@@ -63,17 +70,74 @@ public class CharController : MonoBehaviour
 
     public void returnMenu()
     {
+        sceneCounter = 0;
         SceneManager.LoadScene(0);
     }
 
     public void SwordChange(int index)
     {
-        sword.GetComponent<BoxCollider>().size = swords[index].GetComponent<BoxCollider>().size;
-        sword.GetComponent<MeshFilter>().sharedMesh = swords[index].GetComponent<MeshFilter>().sharedMesh;
-        sword.GetComponent<MeshRenderer>().sharedMaterial = swords[index].GetComponent<MeshRenderer>().sharedMaterial;
+        sword.GetComponent<BoxCollider>().size = swords[index].Size;
+        sword.GetComponent<MeshFilter>().sharedMesh = swords[index].Mesh;
+        sword.GetComponent<MeshRenderer>().sharedMaterial = swords[index].Material;
     }
 
+    public void LevelUpAnimation()
+    {
+        newLevelPanel.SetActive(true);
+        pause = true;
+        mainGamePanel.SetActive(false);
+        if (PlayerPrefs.GetInt("Level") %2 == 1)
+        {
+            string square = (Mathf.Pow((-1), PlayerPrefs.GetInt("Level") + 1)).ToString();
+            Debug.Log(square);
+            int index = (((2 * PlayerPrefs.GetInt("Level")) + int.Parse(square) + 1)) / 4;
+            Vector3 playerTransform = new Vector3(transform.position.x - 2.5f, 1, transform.position.z);
+            newSword = Instantiate(swords[index - 1].SwordObject, newSwordPosition);
+            plusDamageImage.SetActive(true);
+            plusHealth.text = "+" + ((5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20)) - (5 * (Mathf.Pow((PlayerPrefs.GetInt("Level") - 1), 2) - (PlayerPrefs.GetInt("Level") - 1) + 20))).ToString();
+            oldLevel.text = (PlayerPrefs.GetInt("Level") - 1).ToString();
+            newLevel.text = (PlayerPrefs.GetInt("Level")).ToString();
+            plusDamage.text = "+" + (swords[index - 1].Power - swords[index - 2].Power).ToString();
+            newSword.GetComponent<BoxCollider>().isTrigger = true;
+            swordName.text = swords[index - 1].Name;
+            newSwordText.text = "New Sword";
 
+
+        }
+        else
+        {
+
+            plusHealth.text = "+" + ((5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20)) - (5 * (Mathf.Pow((PlayerPrefs.GetInt("Level") - 1), 2) - (PlayerPrefs.GetInt("Level") - 1) + 20))).ToString();
+            oldLevel.text = (PlayerPrefs.GetInt("Level") - 1).ToString();
+            newLevel.text = (PlayerPrefs.GetInt("Level")).ToString();
+            plusDamage.text = "";
+            plusDamageImage.SetActive(false);
+            swordName.text = "";
+            newSwordText.text = "";
+        }
+        
+    }
+
+    public void closeNewLevelPanel()
+    {
+        newLevelPanel.SetActive(false);
+        Destroy(newSword);
+        plusDamageImage.SetActive(false);
+        mainGamePanel.SetActive(true);
+        pause = false;
+        
+    }
+    public void LevelUp()
+    {
+        string square = (Mathf.Pow((-1), PlayerPrefs.GetInt("Level") + 1)).ToString();
+        Debug.Log(square);
+        int index = (((2 * PlayerPrefs.GetInt("Level")) + int.Parse(square) + 1)) / 4;
+        SwordChange(index-1);
+        maxHealth = 5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20) + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")));
+
+        sword.GetComponent<sword>().power = swords[index-1].Power + (PlayerPrefs.GetFloat("bonusDamageLevel") - 1) * (PlayerPrefs.GetFloat("bonusDamageLevel"));
+
+    }
     public void Spawn()
     {
         Vector3 spawnDirection = Random.insideUnitCircle.normalized * 30f;
@@ -84,16 +148,19 @@ public class CharController : MonoBehaviour
     }
     void Start()
     {
-        SwordChange(PlayerPrefs.GetInt("Level"));
-        Debug.Log(sword.GetComponent<BoxCollider>().size);
+        if(sceneCounter == 0)
+        {
+            sceneCounter = 1;
+            SceneManager.LoadScene(1);
+        }
+        LevelUp();
         InvokeRepeating(nameof(Spawn), 2f, 2f);
-        speed = 250 +  + PlayerPrefs.GetFloat("speed");
+        speed = 250 + PlayerPrefs.GetFloat("speed");
         sword.GetComponent<BoxCollider>().enabled = false;
-        healt = PlayerPrefs.GetFloat("MaxHealt") + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")));
+        healt = 5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20) + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")));
 
         lvlText.text = PlayerPrefs.GetInt("Level").ToString();
         maxHealth = healt;
-        //Initialization our angles of camera
         xAngle = 0.0f;
         yAngle = 0.0f;
         this.transform.rotation = Quaternion.Euler(yAngle, xAngle, 0.0f);
@@ -108,7 +175,6 @@ public class CharController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        SwordChange(PlayerPrefs.GetInt("Level"));
         if (healt<=0 && !restart.activeInHierarchy)
         {
             StartCoroutine(buttonActive());
@@ -444,4 +510,53 @@ public class CharController : MonoBehaviour
 
         
     }
+    [System.Serializable]
+public class Sword
+{
+    public float _power;
+    public string _name;
+    public GameObject _swordObject;
+    Material _material;
+    Mesh _mesh;
+    Vector3 _size;
+
+    public Sword(float powerC , GameObject swordObject)
+    {
+        _power = powerC;
+        _swordObject = swordObject;
+
+    }
+
+    public GameObject SwordObject
+        {
+            get { return _swordObject;}
+        }
+    public float Power
+    {
+        get { return _power; }
+        set { _power = value; }
+    }
+    public string Name
+    {
+        get { return _name;}
+        set { _name = value;}
+    }
+    public Material Material
+    {
+        get { return _swordObject.GetComponent<MeshRenderer>().sharedMaterial; }
+        set { _material = value; }
+    }
+    public Mesh Mesh
+    {
+        get { return _swordObject.GetComponent<MeshFilter>().sharedMesh; }
+        set { _mesh = value; }
+    }
+    public Vector3 Size
+    {
+        get { return _swordObject.GetComponent<BoxCollider>().size; }
+        set { _size = value; }
+    }
 }
+}
+
+

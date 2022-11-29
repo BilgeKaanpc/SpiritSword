@@ -6,7 +6,6 @@ using TMPro;
 
 public class levelController : MonoBehaviour
 {
-    public List<float> xp;
     public float nowXp;
     public TextMeshProUGUI xpText;
     public Image xpBar;
@@ -17,14 +16,10 @@ public class levelController : MonoBehaviour
         {
             PlayerPrefs.SetInt("Level", 1);
         }
-        xp = new List<float>()
-        {
-            100,200,400,800,1600
-        };
         nowXp = PlayerPrefs.GetFloat("XP");
-        xpText.text = PlayerPrefs.GetFloat("XP") + "/" + xp[PlayerPrefs.GetInt("Level")-1];
-        xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / xp[PlayerPrefs.GetInt("Level")-1];
-        
+        xpText.text = PlayerPrefs.GetFloat("XP") + "/" + (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
+        xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
+
     }
 
    

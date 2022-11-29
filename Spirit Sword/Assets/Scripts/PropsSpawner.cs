@@ -15,7 +15,6 @@ public class PropsSpawner : MonoBehaviour
     Transform playerTransform;
     float distanceX, distanceZ;
     bool canCreate = true;
-    bool destroyable = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,11 +49,6 @@ public class PropsSpawner : MonoBehaviour
         }
     }
 
-    IEnumerator canDestroy()
-    {
-        yield return new WaitForSeconds(5);
-        destroyable = true;
-    }
     void Check(Vector3 test)
     {
         for (int i = 0; i < areaList.Count; i++)

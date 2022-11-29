@@ -2361,7 +2361,7 @@ MonoBehaviour:
   power: 0
   healtText: {fileID: 3635744974117820052}
   axe: {fileID: 4199709102475386913}
-  givenXp: 8
+  givenXp: 50
   healtBar: {fileID: 3635744973721749139}
   canvas: {fileID: 3635744974096218191}
   healt: 100
