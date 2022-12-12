@@ -17,18 +17,12 @@ public class sword : MonoBehaviour
     }
     public void xpAdd(float givenXp)
     {
-        Debug.Log("girdiyo");
         GameObject lvlController = GameObject.Find("LevelController");
-        Debug.Log(lvlController);
         PlayerPrefs.SetFloat("XP", PlayerPrefs.GetFloat("XP") + givenXp);
-        Debug.Log(PlayerPrefs.GetFloat("XP"));
         lvlController.GetComponent<levelController>().nowXp = PlayerPrefs.GetFloat("XP");
         if ((50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2)) <= PlayerPrefs.GetFloat("XP"))
         {
-
             PlayerPrefs.SetInt("skillPoints", PlayerPrefs.GetInt("skillPoints") + 1);
-
-
             PlayerPrefs.SetFloat("XP", 0);
             PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
             GameObject main = GameObject.Find("MainCharacter");

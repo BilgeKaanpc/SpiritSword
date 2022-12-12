@@ -10,7 +10,6 @@ public class skeletonController : MonoBehaviour
     Transform tr;
     Animator animator;
     [SerializeField] float followSpeed;
-    [SerializeField] int power;
     [SerializeField] TextMeshProUGUI healtText;
     [SerializeField] GameObject axe;
     [SerializeField] public float givenXp;
@@ -45,13 +44,7 @@ public class skeletonController : MonoBehaviour
     }
     IEnumerator attackDration()
     {
-        /*  canHealable += 5;
-        while (canHealable > 0)
-        {
-            canHealable -= 1;
-            yield return new WaitForSeconds(1);
-        }*/
-            axe.GetComponent<BoxCollider>().enabled = true;
+        axe.GetComponent<BoxCollider>().enabled = true;
         yield return new WaitForSeconds(1);
 
         axe.GetComponent<BoxCollider>().enabled = false;
@@ -79,8 +72,6 @@ public class skeletonController : MonoBehaviour
     {
         if (!hero.GetComponent<CharController>().pause)
         {
-
-
             if (transform.position.y < -2)
             {
                 Destroy(gameObject);
@@ -110,7 +101,16 @@ public class skeletonController : MonoBehaviour
                         if (distance < 2 && canHit && hitDuration == 0)
                         {
                             canHit = false;
-                            animator.Play("SkeletonOutlaw@Attack01");
+                            if(givenXp > 45)
+                            {
+                                animator.Play("SkeletonOutlaw@Attack02");
+                            }
+                            else
+                            {
+
+                                animator.Play("SkeletonOutlaw@Attack01");
+                            }
+
                             StartCoroutine(attackDration());
                             rb.velocity = new Vector3(0, 0, 0);
                         }
@@ -119,8 +119,6 @@ public class skeletonController : MonoBehaviour
                             rb.velocity = transform.forward * followSpeed * Time.deltaTime;
 
                         }
-
-
                     }
                 }
                 if (randomWalk)

@@ -35,10 +35,17 @@ public class CharController : MonoBehaviour
     public static float healt;
     public bool isAlive = true;
     [SerializeField] GameObject newLevelPanel , plusDamageImage;
+    [SerializeField] GameObject swordLight;
 
     [SerializeField] public List<Sword> swords = new List<Sword>();
 
     [SerializeField] TextMeshProUGUI oldLevel, newLevel, plusHealth, plusDamage,swordName,newSwordText;
+
+
+    //Test 
+    [SerializeField] int Level;
+    [SerializeField] float xp;
+
 
     public GameObject head;
     bool attackMoment = false;
@@ -57,9 +64,11 @@ public class CharController : MonoBehaviour
     [SerializeField] Transform newSwordPosition;
     GameObject newSword;
     [SerializeField] GameObject enemy;
+    [SerializeField] List<GameObject> enemyList = new List<GameObject>();
     [SerializeField] GameObject mainGamePanel;
     public bool pause = false;
     public static int sceneCounter = 0;
+    bool animationTurn = false;
 
     //Formules
     //Bonus Damage Formul (n-1).n   -  n = PLayerPrefs.getint("damage");
@@ -86,8 +95,11 @@ public class CharController : MonoBehaviour
         newLevelPanel.SetActive(true);
         pause = true;
         mainGamePanel.SetActive(false);
+        rb.velocity = new Vector3(0, 0, 0);
         if (PlayerPrefs.GetInt("Level") %2 == 1)
         {
+            swordLight.SetActive(true);
+            animationTurn = true;
             string square = (Mathf.Pow((-1), PlayerPrefs.GetInt("Level") + 1)).ToString();
             Debug.Log(square);
             int index = (((2 * PlayerPrefs.GetInt("Level")) + int.Parse(square) + 1)) / 4;
@@ -125,7 +137,9 @@ public class CharController : MonoBehaviour
         plusDamageImage.SetActive(false);
         mainGamePanel.SetActive(true);
         pause = false;
-        
+        animationTurn = false;
+        swordLight.SetActive(false);
+
     }
     public void LevelUp()
     {
@@ -144,10 +158,149 @@ public class CharController : MonoBehaviour
         Vector3 newSpawnArea = new Vector3(spawnDirection.x, 0, spawnDirection.y);
         Vector3 spawnPoint = transform.position + newSpawnArea;
         Quaternion newRotation = Quaternion.Euler(enemy.transform.rotation.x, Random.Range(0, 360), enemy.transform.rotation.z);
-        GameObject enemySpawn = Instantiate(enemy, spawnPoint, newRotation);
+        int randomIndex = Random.Range(0, 100);
+        int level = PlayerPrefs.GetInt("Level");
+        switch(level)
+        {
+            case < 2:
+                if (randomIndex < 90)
+                {
+
+                    GameObject enemySpawn = Instantiate(enemyList[0], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[1], spawnPoint, newRotation);
+                }
+                break;
+            case < 4:
+                if(randomIndex < 50)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[0], spawnPoint, newRotation);
+                }else if (randomIndex < 90)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[1], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[2], spawnPoint, newRotation);
+                }
+                break;
+            case < 6:
+                if (randomIndex < 20)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[0], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 60)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[1], spawnPoint, newRotation);
+                }
+                else if(randomIndex < 90)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[2], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[3], spawnPoint, newRotation);
+                }
+                break;
+            case < 10:
+                if (randomIndex < 5)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[0], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 15)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[1], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 35)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[2], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[3], spawnPoint, newRotation);
+                }
+                break;
+            case < 12:
+                if (randomIndex < 5)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[1], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 15)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[2], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 35)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[3], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[4], spawnPoint, newRotation);
+                }
+                break;
+            case < 14:
+                if (randomIndex < 5)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[2], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 15)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[3], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 35)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[4], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[5], spawnPoint, newRotation);
+                }
+                break;
+            case < 16:
+                if (randomIndex < 5)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[3], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 15)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[4], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 35)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[5], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[6], spawnPoint, newRotation);
+                }
+                break;
+            case > 16:
+                if (randomIndex < 5)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[4], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 15)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[5], spawnPoint, newRotation);
+                }
+                else if (randomIndex < 35)
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[6], spawnPoint, newRotation);
+                }
+                else
+                {
+                    GameObject enemySpawn = Instantiate(enemyList[7], spawnPoint, newRotation);
+                }
+                break;
+            default:
+                break;
+        }
     }
     void Start()
     {
+        PlayerPrefs.SetInt("Level", Level);
         if(sceneCounter == 0)
         {
             sceneCounter = 1;
@@ -175,6 +328,12 @@ public class CharController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (animationTurn)
+        {
+            
+            newSword.transform.Rotate(Vector3.up, Time.deltaTime * 100);
+            
+        }
         if (healt<=0 && !restart.activeInHierarchy)
         {
             StartCoroutine(buttonActive());
@@ -198,8 +357,17 @@ public class CharController : MonoBehaviour
         {
             if (!attackMoment)
             {
-                direction = tr.forward * veriableJoyStick.Vertical + tr.right * veriableJoyStick.Horizontal;
-                rb.velocity = new Vector3(direction.x * speed * Time.fixedDeltaTime, rb.velocity.y, direction.z * speed * Time.fixedDeltaTime);
+                if (!pause)
+                {
+
+                    direction = tr.forward * veriableJoyStick.Vertical + tr.right * veriableJoyStick.Horizontal;
+                    rb.velocity = new Vector3(direction.x * speed * Time.fixedDeltaTime, rb.velocity.y, direction.z * speed * Time.fixedDeltaTime);
+                }
+                else
+                {
+                    animator.SetInteger("walk", 0);
+                    rb.velocity = new Vector3(0, 0, 0);
+                }
                 //rb.velocity = direction * speed * Time.fixedDeltaTime;
             }
         }
@@ -244,8 +412,6 @@ public class CharController : MonoBehaviour
 
            yield return new WaitForSeconds(1.5f - (PlayerPrefs.GetFloat("regen")/10));
         }
-        
-        
     }
     public void Jump()
     {
@@ -279,7 +445,7 @@ public class CharController : MonoBehaviour
     void Update()
     {
        
-        if (isAlive)
+        if (isAlive && !pause)
         {
             if (!attackMoment && animator.GetInteger("attack") == 0)
             {
