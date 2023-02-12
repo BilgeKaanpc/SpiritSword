@@ -40,7 +40,7 @@ public class CharController : MonoBehaviour
     [SerializeField] public List<Sword> swords = new List<Sword>();
 
     [SerializeField] TextMeshProUGUI oldLevel, newLevel, plusHealth, plusDamage,swordName,newSwordText;
-
+    [SerializeField] GameObject levelUpEffect;
 
     //Test 
     [SerializeField] int Level;
@@ -90,8 +90,12 @@ public class CharController : MonoBehaviour
         sword.GetComponent<MeshRenderer>().sharedMaterial = swords[index].Material;
     }
 
+    GameObject levelupAnim;
     public void LevelUpAnimation()
     {
+        levelupAnim = Instantiate(levelUpEffect, transform.position, transform.rotation);
+        animator.Play("LevelUp_Battle_SwordAndShield");
+        levelupAnim.SetActive(true);
         newLevelPanel.SetActive(true);
         pause = true;
         mainGamePanel.SetActive(false);
@@ -132,6 +136,7 @@ public class CharController : MonoBehaviour
 
     public void closeNewLevelPanel()
     {
+        levelupAnim.SetActive(false);
         newLevelPanel.SetActive(false);
         Destroy(newSword);
         plusDamageImage.SetActive(false);
@@ -144,7 +149,6 @@ public class CharController : MonoBehaviour
     public void LevelUp()
     {
         string square = (Mathf.Pow((-1), PlayerPrefs.GetInt("Level") + 1)).ToString();
-        Debug.Log(square);
         int index = (((2 * PlayerPrefs.GetInt("Level")) + int.Parse(square) + 1)) / 4;
         SwordChange(index-1);
         maxHealth = 5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20) + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")));
@@ -338,17 +342,6 @@ public class CharController : MonoBehaviour
         {
             StartCoroutine(buttonActive());
         }
-        if (duration > 0)
-        {
-            duration -= Time.deltaTime;
-            skillDurationImage.fillAmount = duration / fullDuration;
-
-        }
-        else
-        {
-            skillDurationImage.fillAmount = 0;
-
-        }
        
         
         healtText.text = healt+"/"+maxHealth;
@@ -442,9 +435,12 @@ public class CharController : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
+
+    
     void Update()
     {
-       
+
+
         if (isAlive && !pause)
         {
             if (!attackMoment && animator.GetInteger("attack") == 0)
@@ -649,7 +645,8 @@ public class CharController : MonoBehaviour
         animator.speed = 1;
         sword.GetComponent<BoxCollider>().enabled = true;
         canHittable = false;
-        StartCoroutine(skillDuration());
+        GameObject method = GameObject.Find("SkillManager");
+        StartCoroutine(method.GetComponent<Skills>().skillDuration_1(20));
         animator.SetInteger("attack", 5);
         yield return new WaitForSeconds(5);
         animator.SetInteger("attack", 0);

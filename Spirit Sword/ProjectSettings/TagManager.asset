@@ -10,6 +10,9 @@ TagManager:
   - Skeleton_lvl1
   - sword
   - health
+  - destroyableSkill
+  - bumerang
+  - oneHitSkill
   layers:
   - Default
   - TransparentFX

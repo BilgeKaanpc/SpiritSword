@@ -7,6 +7,7 @@ public class jumpController : MonoBehaviour
     public static bool canJump = true;
 
     [SerializeField] Animator animator;
+    [SerializeField] GameObject onGroundEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,8 +35,16 @@ public class jumpController : MonoBehaviour
                 animator.Play("JumpEnd_Normal_InPlace_SwordAndShield");
                 animator.SetInteger("walk", 0);
                 canJump = true;
+                StartCoroutine(fallAnimation(transform.position,transform.rotation));
+               
             }
         }
+    }
+    IEnumerator fallAnimation(Vector3 position,Quaternion rotation)
+    {
+        GameObject animation = Instantiate(onGroundEffect,position,rotation);
+        yield return new WaitForSeconds(1);
+        Destroy(animation);
     }
     private void OnTriggerStay(Collider other)
     {
