@@ -12,6 +12,12 @@ public class Skills : MonoBehaviour
     [SerializeField] GameObject rasenganEffect;
     [SerializeField] GameObject turningSwords;
     [SerializeField] GameObject flameMeteor;
+    [SerializeField] GameObject magnetExplosion;
+    [SerializeField] GameObject riseingWall;
+    [SerializeField] GameObject pushSkill;
+    [SerializeField] GameObject teleporteffect;
+    [SerializeField] GameObject speedEffect;
+    [SerializeField] GameObject hitableEffect;
 
     [SerializeField] GameObject fireSkillEffect;
 
@@ -30,21 +36,18 @@ public class Skills : MonoBehaviour
     float fullDuration_1;
     float duration_2;
     float fullDuration_2;
+
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
-    }
 
+    }
     private void FixedUpdate()
     {
-
         if (duration_1 > 0)
         {
             duration_1 -= Time.deltaTime;
@@ -102,18 +105,75 @@ public class Skills : MonoBehaviour
     public void SkillButton_1()
     {
         button1.interactable = false;
+        //StartCoroutine(MagnetSkill_Duration());
         //StartCoroutine(createFlameMeteor());
         StartCoroutine(turnSwords());
         //rasenShuriken();
         //mainCharacter.GetComponent<CharController>().strongAttack();
         //StartCoroutine(Skill_1());
     }
+
+
+    [SerializeField] int whichSkill = 0;
     public void SkillButton_2()
     {
         button2.interactable = false;
-        healthSkill();
-        //StartCoroutine(Skill_1());
-        //StartCoroutine(createFlameMeteor());
+        
+        //healthSkill();
+        RiseingWall();
+        //Push();
+        //StartCoroutine(RandomTeleport());
+        //StartCoroutine(speedPowerUp());
+        //StartCoroutine(Hitable());
+
+    }
+    IEnumerator speedPowerUp()
+    {
+        StartCoroutine(skillDuration_2(10));
+        mainCharacter.GetComponent<CharController>().speed = 250 + PlayerPrefs.GetFloat("speed") + 300;
+        GameObject right = Instantiate(speedEffect, mainCharacter.transform.position, Quaternion.identity);
+        right.transform.parent = mainCharacter.transform;
+        yield return new WaitForSeconds(5);
+        mainCharacter.GetComponent<CharController>().speed = 250 + PlayerPrefs.GetFloat("speed");
+        Destroy(right);
+    }
+
+    IEnumerator Hitable()
+    {
+        StartCoroutine(skillDuration_2(10));
+        GameObject hitableEffectObject = Instantiate(hitableEffect, mainCharacter.transform.position + new Vector3(0,0.5f,0), Quaternion.identity);
+        hitableEffectObject.transform.parent = mainCharacter.transform;
+        CharController.canHittable = false;
+        yield return new WaitForSeconds(4);
+        CharController.canHittable = true;
+        Destroy(hitableEffectObject);
+    }
+
+    IEnumerator MagnetSkill_Duration()
+    {
+        StartCoroutine(skillDuration_1(15));
+        GameObject magnet_1 = Instantiate(magnetExplosion, mainCharacter.transform.position + new Vector3(7,1,0), Quaternion.identity);
+        GameObject magnet_2 = Instantiate(magnetExplosion, mainCharacter.transform.position + new Vector3(-7,1,0), Quaternion.identity);
+        GameObject magnet_3 = Instantiate(magnetExplosion, mainCharacter.transform.position + new Vector3(0,1,7), Quaternion.identity);
+        GameObject magnet_4 = Instantiate(magnetExplosion, mainCharacter.transform.position + new Vector3(0,1,-7), Quaternion.identity);
+        yield return new WaitForSeconds(8);
+        Destroy(magnet_1);
+        Destroy(magnet_2);
+        Destroy(magnet_3);
+        Destroy(magnet_4);
+    }
+
+    
+    IEnumerator RandomTeleport()
+    {
+        StartCoroutine(skillDuration_2(5));
+        Vector3 spawnDirection = Random.insideUnitCircle.normalized * 10f;
+        Vector3 newSpawnArea = new Vector3(spawnDirection.x, 0, spawnDirection.y);
+        Vector3 spawnPoint = transform.position + newSpawnArea;
+        mainCharacter.transform.position = new Vector3(spawnPoint.x, 0.5f, spawnPoint.z);
+        GameObject tpEffect = Instantiate(teleporteffect, mainCharacter.transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(1.2f);
+        Destroy(tpEffect);
     }
 
     public IEnumerator Skill_1()
@@ -130,6 +190,19 @@ public class Skills : MonoBehaviour
         StartCoroutine(skillDuration_2(5));
         Instantiate(healthEffect, new Vector3(mainCharacter.transform.position.x, mainCharacter.transform.position.y + 1, mainCharacter.transform.position.z), mainCharacter.transform.rotation);
         CharController.healt = 5 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 20) + (5 / 2) * ((PlayerPrefs.GetFloat("bonusHealthLevel") - 1) * (PlayerPrefs.GetFloat("bonusHealthLevel")));
+    }
+
+    public void Push()
+    {
+        StartCoroutine(skillDuration_2(5));
+        Instantiate(pushSkill, mainCharacter.transform.position + new Vector3(0,1,0), Quaternion.identity);
+    }
+
+    public void RiseingWall()
+    {
+        StartCoroutine(skillDuration_2(5));
+        Vector3 spawnPosition = mainCharacter.transform.position +(mainCharacter.transform.forward * 3);
+        Instantiate(riseingWall, spawnPosition + new Vector3(0,-1.5f,0), mainCharacter.transform.rotation);
     }
 
     public void rasenShuriken()
@@ -150,7 +223,7 @@ public class Skills : MonoBehaviour
 
     IEnumerator createFlameMeteor()
     {
-        StartCoroutine(skillDuration_2(15));
+        StartCoroutine(skillDuration_1(15));
         GameObject fireEffect = Instantiate(fireSkillEffect,mainCharacter.transform.position,Quaternion.identity);
         GameObject flames =  Instantiate(flameMeteor, mainCharacter.transform.position + new Vector3(0, 1, 0), Quaternion.identity);
         yield return new WaitForSeconds(2);

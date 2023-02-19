@@ -6,40 +6,55 @@ public class Damage : MonoBehaviour
 {
     [SerializeField] GameObject hitEffect;
     [SerializeField] float damage;
+    [SerializeField] bool isShouldWait = false;
+    bool canHit = false;
     private void Start()
     {
+        canHit = false;
+        if (isShouldWait)
+        {
+            StartCoroutine(waitForExplosion());
+        }
+    }
+    IEnumerator waitForExplosion()
+    {
+        yield return new WaitForSeconds(4);
+        canHit = true;
 
     }
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Skeleton_lvl1")
         {
-            
-            StartCoroutine(hitEffectDestroy(other));
-            other.gameObject.GetComponent<skeletonController>().healt -= damage;
-            if (other.gameObject.GetComponent<skeletonController>().healt <= 0)
-            {
-
-               // StartCoroutine(Kill(other.gameObject));
-                GameObject mainC = GameObject.Find("MainCharacter");
-
-                mainC.GetComponentInChildren<sword>().Kill(other.gameObject);
-            }
-            else
-            {
-                other.gameObject.GetComponent<Animator>().Play("SkeletonOutlaw@Damage00");
-
-
-         
-           }
-            if (gameObject.tag == "destroyableSkill")
-            {
-                Destroy(gameObject);
-            }
+            DamageForSkeleton(other);
         }
     }
 
 
+    public void DamageForSkeleton(Collider other)
+    {
+        StartCoroutine(hitEffectDestroy(other));
+        other.gameObject.GetComponent<skeletonController>().healt -= damage;
+        if (other.gameObject.GetComponent<skeletonController>().healt <= 0)
+        {
+
+            // StartCoroutine(Kill(other.gameObject));
+            GameObject mainC = GameObject.Find("MainCharacter");
+
+            mainC.GetComponentInChildren<sword>().Kill(other.gameObject);
+        }
+        else
+        {
+            other.gameObject.GetComponent<Animator>().Play("SkeletonOutlaw@Damage00");
+
+
+
+        }
+        if (gameObject.tag == "destroyableSkill")
+        {
+            Destroy(gameObject);
+        }
+    }
     private void OnTriggerStay(Collider other)
     {
         if(gameObject.tag != "oneHitSkill")
@@ -47,29 +62,27 @@ public class Damage : MonoBehaviour
 
             if (other.gameObject.tag == "Skeleton_lvl1")
             {
-
-                StartCoroutine(hitEffectDestroy(other));
-                other.gameObject.GetComponent<skeletonController>().healt -= damage;
-                if (other.gameObject.GetComponent<skeletonController>().healt <= 0)
+                if(isShouldWait)
                 {
-
-                    // StartCoroutine(Kill(other.gameObject));
-                    GameObject mainC = GameObject.Find("MainCharacter");
-
-                    mainC.GetComponentInChildren<sword>().Kill(other.gameObject);
+                    if (canHit)
+                    {
+                        DamageForSkeleton(other);
+                    }
                 }
                 else
                 {
-                    other.gameObject.GetComponent<Animator>().Play("SkeletonOutlaw@Damage00");
-
-
-
+                    DamageForSkeleton(other);
                 }
-                if (gameObject.tag == "destroyableSkill")
-                {
-                    Destroy(gameObject);
-                }
+
+
             }
+        }
+        else
+        {
+            if (other.gameObject.tag == "Skeleton_lvl1")
+                {
+                    DamageForSkeleton(other);
+                }
         }
     }
 

@@ -30258,6 +30258,12 @@ MonoBehaviour:
   rasenganEffect: {fileID: 100006, guid: 3fb31ce22fa348f49a27f87a5b0adcbe, type: 3}
   turningSwords: {fileID: 5113085542693926409, guid: 1c857324bf13c5f40a2aa1c61dafc929, type: 3}
   flameMeteor: {fileID: 4217212979407625697, guid: 8fe884a24030e6f48a9309be5f4dee98, type: 3}
+  magnetExplosion: {fileID: 100016, guid: 3f1d919251d33ab45a23dc83a945d1da, type: 3}
+  riseingWall: {fileID: 8956148123831198961, guid: bb88cc9c37bea8e4fa2a0787701ff1d3, type: 3}
+  pushSkill: {fileID: 5997348226217156885, guid: 75a851bf1b313394ea3a7b0e564af592, type: 3}
+  teleporteffect: {fileID: 1550052479216618333, guid: 5339db2017ea31248a2ad01eaaa40e06, type: 3}
+  speedEffect: {fileID: 3351077355079321680, guid: 6ffaffc991768ef4a928741d3ce01658, type: 3}
+  hitableEffect: {fileID: 6890611038297092486, guid: 5dab5d253e8b08b4a9121f852312f61f, type: 3}
   fireSkillEffect: {fileID: 100012, guid: a905d8e5159ffeb46baa8d2a7624717f, type: 3}
   skillDurationText_1: {fileID: 1335718442}
   skillDurationText_2: {fileID: 1946640037}
@@ -30269,6 +30275,7 @@ MonoBehaviour:
   skillImage_2: {fileID: 173586054}
   mainCharacter: {fileID: 5352958572783153466}
   animator: {fileID: 5352958572783153469}
+  whichSkill: 0
 --- !u!4 &1500276728
 Transform:
   m_ObjectHideFlags: 0
@@ -43423,7 +43430,7 @@ PrefabInstance:
       objectReference: {fileID: 963194225}
     - target: {fileID: 2505040125138853053, guid: 5036f0f256ef248418371847e96e7704, type: 3}
       propertyPath: Level
-      value: 5
+      value: 99
       objectReference: {fileID: 0}
     - target: {fileID: 2505040125138853053, guid: 5036f0f256ef248418371847e96e7704, type: 3}
       propertyPath: lvlText
@@ -44176,7 +44183,7 @@ PrefabInstance:
     - target: {fileID: 2505040125138853053, guid: 5036f0f256ef248418371847e96e7704, type: 3}
       propertyPath: swords.Array.data[49]._swordObject
       value: 
-      objectReference: {fileID: 8947079371753237599, guid: 97d88fb9a3565d84daf5fff081fcbb91, type: 3}
+      objectReference: {fileID: 1014989259798498, guid: 8fc40ebf5a41b30428929f5ba3697759, type: 3}
     - target: {fileID: 2505040125138853053, guid: 5036f0f256ef248418371847e96e7704, type: 3}
       propertyPath: swords.Array.data[50]._swordObject
       value: 
@@ -44231,7 +44238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7188280886380732030, guid: 5036f0f256ef248418371847e96e7704, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50
+      value: 52.64
       objectReference: {fileID: 0}
     - target: {fileID: 7188280886380732030, guid: 5036f0f256ef248418371847e96e7704, type: 3}
       propertyPath: m_LocalPosition.y

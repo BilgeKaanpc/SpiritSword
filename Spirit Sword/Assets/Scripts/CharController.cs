@@ -53,7 +53,7 @@ public class CharController : MonoBehaviour
 
     Vector3 stop = new Vector3(0, 0, 0);
     // joystik
-    float speed;
+    public float speed;
     public FixedJoystick veriableJoyStick;
     public Rigidbody rb;
     public Transform tr;
@@ -85,6 +85,10 @@ public class CharController : MonoBehaviour
 
     public void SwordChange(int index)
     {
+        if (index >= 49)
+        {
+            sword.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
         sword.GetComponent<BoxCollider>().size = swords[index].Size;
         sword.GetComponent<MeshFilter>().sharedMesh = swords[index].Mesh;
         sword.GetComponent<MeshRenderer>().sharedMaterial = swords[index].Material;

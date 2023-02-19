@@ -27,6 +27,7 @@ public class skeletonController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         StartCoroutine(randomMove());
         maxHealt = healt;
         axe.GetComponent<BoxCollider>().enabled = false;

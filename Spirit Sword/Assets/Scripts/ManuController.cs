@@ -7,8 +7,6 @@ using TMPro;
 
 public class ManuController : MonoBehaviour
 {
-   
-
     [SerializeField] GameObject homePanel;
     [SerializeField] GameObject equipmentPanel;
     [SerializeField] GameObject skillsPanel;
@@ -48,6 +46,16 @@ public class ManuController : MonoBehaviour
     [SerializeField] Button damageButton;
     [SerializeField] Button regenButton;
     [SerializeField] Button speedButton;
+
+    //Buttons
+    [SerializeField] Button swordsPanelButton;
+    [SerializeField] Button skillPanelButton;
+    [SerializeField] Button littleSkillButton;
+
+    //Panels
+    [SerializeField] GameObject swordsPanelUI;
+    [SerializeField] GameObject skillPanelUI;
+    [SerializeField] GameObject littleSkillPanelUI;
 
     //max Values
     float maxSpeedLvl = 100;
@@ -161,6 +169,11 @@ public class ManuController : MonoBehaviour
     // 5 * (Mathf.Pow(PlayerPrefs.GetFloat("MaxHealt"),2) - PlayerPrefs.GetFloat("MaxHealt") + 20) 
     // (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2)
 
+
+    private void Update()
+    {
+
+    }
     public void UpgradeAllSkill()
     {
 
@@ -262,6 +275,39 @@ public class ManuController : MonoBehaviour
         UpgradeAllSkill();
     }
 
+
+    public void SwordsPanel()
+    {
+        swordsPanelButton.interactable = false;
+        skillPanelButton.interactable = true;
+        littleSkillButton.interactable = true;
+
+        swordsPanelUI.SetActive(true);
+        skillPanelUI.SetActive(false);
+        littleSkillPanelUI.SetActive(false);
+    }
+    public void SkillPanel()
+    {
+
+        swordsPanelButton.interactable = true;
+        skillPanelButton.interactable = false;
+        littleSkillButton.interactable = true;
+
+        swordsPanelUI.SetActive(false);
+        skillPanelUI.SetActive(true);
+        littleSkillPanelUI.SetActive(false);
+    }
+    public void LittleSkillPanel()
+    {
+
+        swordsPanelButton.interactable = true;
+        skillPanelButton.interactable = true;
+        littleSkillButton.interactable = false;
+
+        swordsPanelUI.SetActive(false);
+        skillPanelUI.SetActive(false);
+        littleSkillPanelUI.SetActive(true);
+    }
 
 
     public void goHome()
