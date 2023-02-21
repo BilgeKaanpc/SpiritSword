@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 3635744973430796709}
   m_Layer: 0
   m_Name: lookControl
-  m_TagString: Untagged
+  m_TagString: skeletonLook
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

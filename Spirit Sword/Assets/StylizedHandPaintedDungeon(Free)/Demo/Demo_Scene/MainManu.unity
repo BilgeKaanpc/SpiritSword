@@ -5235,7 +5235,17 @@ MonoBehaviour:
   tier: {fileID: 831896937}
   nameText: {fileID: 821605155}
   littleSkillImage: {fileID: 931328430}
-  LittleSkillList: []
+  LittleSkillList:
+  - _name: test
+    _time: 23
+    _tier: s
+    _description: asdfdasf
+    _skillImage: {fileID: 0}
+  - _name: dfgdf
+    _time: 23
+    _tier: asgdf
+    _description: fghjfg
+    _skillImage: {fileID: 0}
 --- !u!1001 &187145815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38115,14 +38125,14 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1739118090}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1101732967}
         m_TargetAssemblyTypeName: ManuController, Assembly-CSharp
-        m_MethodName: loadMap_1
+        m_MethodName: loadMap_2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

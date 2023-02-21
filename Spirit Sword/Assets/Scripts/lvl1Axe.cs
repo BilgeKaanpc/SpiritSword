@@ -21,7 +21,10 @@ public class lvl1Axe : MonoBehaviour
     {
 
         canHit = false;
-        yield return new WaitForSeconds(0.2f);
+        if (!GetComponentInParent<Spider>())
+        {
+            yield return new WaitForSeconds(0.2f);
+        }
         if (CharController.canHittable)
         {
             if (mainCharacter.GetComponent<CharController>().isAlive)
@@ -43,7 +46,6 @@ public class lvl1Axe : MonoBehaviour
                     GameObject xpReset = GameObject.Find("LevelController");
                     xpReset.GetComponent<levelController>().xpText.text = PlayerPrefs.GetFloat("XP") + "/" + (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
                     xpReset.GetComponent<levelController>().xpBar.fillAmount = PlayerPrefs.GetFloat("XP") / (50 * (Mathf.Pow(PlayerPrefs.GetInt("Level"), 2) - PlayerPrefs.GetInt("Level") + 2));
-                    GetComponentInParent<Animator>().Play("SkeletonOutlaw@Idle02");
                     heroAnimator.Play("Die01_SwordAndShield");
                 }
                 else

@@ -17,16 +17,28 @@ public class lookControl : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        lookActivity(other, true);
+    }
+
+    public void lookActivity(Collider other,bool action)
+    {
+        if (other.gameObject.tag == "Player")
         {
-            GetComponentInParent<skeletonController>().canLook = true;
+            switch (gameObject.tag)
+            {
+                case "skeletonLook":
+                    GetComponentInParent<skeletonController>().canLook = action;
+                    break;
+                case "spiderLook":
+                    GetComponentInParent<Spider>().canLook = action;
+                    break;
+                default:
+                    break;
+            }
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
-        {
-            GetComponentInParent<skeletonController>().canLook = false;
-        }
+        lookActivity(other, false);
     }
 }

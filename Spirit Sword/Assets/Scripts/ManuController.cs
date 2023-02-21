@@ -328,8 +328,11 @@ public class ManuController : MonoBehaviour
     }
     public void loadMap_1()
     {
-
         SceneManager.LoadScene(1);
+    }
+    public void loadMap_2()
+    {
+        SceneManager.LoadScene(2);
     }
 
     public void quit()

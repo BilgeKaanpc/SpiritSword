@@ -9,8 +9,8 @@ public class PropsSpawner : MonoBehaviour
     public static List<GameObject> areaList = new List<GameObject>();
     public  List<GameObject> propList = new List<GameObject>();
     [SerializeField] GameObject area;
-    int spawnCount = 70;
-    int flowers = 300;
+    [SerializeField] int spawnCount = 70;
+    [SerializeField] int flowers = 300;
     GameObject player;
     Transform playerTransform;
     float distanceX, distanceZ;

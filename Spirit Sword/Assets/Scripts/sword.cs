@@ -27,24 +27,39 @@ public class sword : MonoBehaviour
     }
     public void Kill(GameObject enemy)
     {
-        if(enemy.tag == "Skeleton_lvl1")
+        enemy.GetComponent<CapsuleCollider>().enabled = false;
+        enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        StartCoroutine(toCon(enemy));
+        if (enemy.tag == "Skeleton_lvl1")
         {
             xpAdd(enemy.GetComponent<skeletonController>().givenXp);
             enemy.GetComponent<Animator>().Play("SkeletonOutlaw@Dead00");
             enemy.GetComponent<skeletonController>().isAlive = false;
             enemy.GetComponent<skeletonController>().healt = 0;
             enemy.GetComponent<skeletonController>().canvas.enabled = false;
-            enemy.GetComponent<CapsuleCollider>().enabled = false;
-            enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-            StartCoroutine(toCon(enemy));
+        }
+        if(enemy.tag == "spider")
+        {
+
+            xpAdd(enemy.GetComponent<Spider>().givenXp);
+            enemy.GetComponent<Spider>().isAlive = false;
+            enemy.GetComponent<Spider>().healt = 0;
+            enemy.GetComponent<Spider>().canvas.enabled = false;
+            enemy.GetComponent<Animator>().Play("Death");
         }
         
     }
 
     IEnumerator toCon(GameObject enemy)
     {
-
-        yield return new WaitForSeconds(1);
+        if(enemy.tag == "Skeleton_lvl1")
+        {
+            yield return new WaitForSeconds(1);
+        }
+        if(enemy.tag == "spider")
+        {
+            yield return new WaitForSeconds(1.2f);
+        }
 
         enemy.GetComponent<Animator>().enabled = false;
         yield return new WaitForSeconds(3);
@@ -55,7 +70,7 @@ public class sword : MonoBehaviour
         Vector3 collisionPoint = new Vector3(other.transform.position.x, other.transform.position.y+1.5f, other.transform.position.z);
         if (other.gameObject.tag == "Skeleton_lvl1")
         {
-            StartCoroutine(hitEffectDestroy(collisionPoint,Quaternion.identity,other));
+            StartCoroutine(hitEffectDestroy(collisionPoint,Quaternion.identity,other,0));
             other.gameObject.GetComponent<skeletonController>().healt -= power;
 
             if (other.gameObject.GetComponent<skeletonController>().healt <= 0)
@@ -71,10 +86,25 @@ public class sword : MonoBehaviour
                 
             }
         }
+        if(other.gameObject.tag == "spider")
+        {
+            StartCoroutine(hitEffectDestroy(collisionPoint, Quaternion.identity, other,-0.5f));
+            other.gameObject.GetComponent<Spider>().healt -= power;
+
+            if(other.gameObject.GetComponent<Spider>().healt <= 0)
+            {
+
+                Kill(other.gameObject);
+            }
+            else
+            {
+                other.gameObject.GetComponent<Animator>().Play("TakeDamage");
+            }
+        }
     }
-    IEnumerator hitEffectDestroy(Vector3 transform,Quaternion rotation,Collider other)
+    IEnumerator hitEffectDestroy(Vector3 transform,Quaternion rotation,Collider other,float height)
     {
-        GameObject hit = Instantiate(hitEffect, transform, rotation);
+        GameObject hit = Instantiate(hitEffect, transform + new Vector3(0,height,0), rotation);
         hit.transform.parent = other.transform;
         yield return new WaitForSeconds(0.5f);
         Destroy(hit);

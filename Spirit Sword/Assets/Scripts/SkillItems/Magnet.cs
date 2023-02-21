@@ -10,6 +10,10 @@ public class Magnet : MonoBehaviour
         {
             other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, new Vector3(transform.position.x,0,transform.position.z), 10 * Time.deltaTime);
         }
+        if(other.gameObject.tag == "spider")
+        {
+            other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, new Vector3(transform.position.x, 0, transform.position.z), 10 * Time.deltaTime);
+        }
     }
 
 }

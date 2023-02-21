@@ -309,7 +309,7 @@ public class CharController : MonoBehaviour
     void Start()
     {
         PlayerPrefs.SetInt("Level", Level);
-        if(sceneCounter == 0)
+        if(sceneCounter == 0 && SceneManager.GetActiveScene().buildIndex == 1)
         {
             sceneCounter = 1;
             SceneManager.LoadScene(1);

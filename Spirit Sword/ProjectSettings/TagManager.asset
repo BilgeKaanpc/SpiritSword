@@ -13,6 +13,9 @@ TagManager:
   - destroyableSkill
   - bumerang
   - oneHitSkill
+  - spider
+  - spiderLook
+  - skeletonLook
   layers:
   - Default
   - TransparentFX

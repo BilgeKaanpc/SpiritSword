@@ -105,9 +105,9 @@ public class Skills : MonoBehaviour
     public void SkillButton_1()
     {
         button1.interactable = false;
-        //StartCoroutine(MagnetSkill_Duration());
+        StartCoroutine(MagnetSkill_Duration());
         //StartCoroutine(createFlameMeteor());
-        StartCoroutine(turnSwords());
+        //StartCoroutine(turnSwords());
         //rasenShuriken();
         //mainCharacter.GetComponent<CharController>().strongAttack();
         //StartCoroutine(Skill_1());
@@ -120,8 +120,8 @@ public class Skills : MonoBehaviour
         button2.interactable = false;
         
         //healthSkill();
-        RiseingWall();
-        //Push();
+        //RiseingWall();
+        Push();
         //StartCoroutine(RandomTeleport());
         //StartCoroutine(speedPowerUp());
         //StartCoroutine(Hitable());

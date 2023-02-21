@@ -28,33 +28,50 @@ public class Damage : MonoBehaviour
         {
             DamageForSkeleton(other);
         }
+        if(other.gameObject.tag == "spider")
+        {
+            DamageForSpider(other);
+        }
     }
 
 
     public void DamageForSkeleton(Collider other)
     {
-        StartCoroutine(hitEffectDestroy(other));
+        StartCoroutine(hitEffectDestroy(other, 1.5f));
         other.gameObject.GetComponent<skeletonController>().healt -= damage;
         if (other.gameObject.GetComponent<skeletonController>().healt <= 0)
         {
-
-            // StartCoroutine(Kill(other.gameObject));
             GameObject mainC = GameObject.Find("MainCharacter");
-
             mainC.GetComponentInChildren<sword>().Kill(other.gameObject);
         }
         else
         {
             other.gameObject.GetComponent<Animator>().Play("SkeletonOutlaw@Damage00");
-
-
-
         }
         if (gameObject.tag == "destroyableSkill")
         {
             Destroy(gameObject);
         }
     }
+    public void DamageForSpider(Collider other)
+    {
+        StartCoroutine(hitEffectDestroy(other,0.5f));
+        other.gameObject.GetComponent<Spider>().healt -= damage;
+        if (other.gameObject.GetComponent<Spider>().healt <= 0)
+        {
+            GameObject mainC = GameObject.Find("MainCharacter");
+            mainC.GetComponentInChildren<sword>().Kill(other.gameObject);
+        }
+        else
+        {
+            other.gameObject.GetComponent<Animator>().Play("TakeDamage");
+        }
+        if (gameObject.tag == "destroyableSkill")
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if(gameObject.tag != "oneHitSkill")
@@ -76,20 +93,39 @@ public class Damage : MonoBehaviour
 
 
             }
+            if(other.gameObject.tag == "spider")
+            {
+                if (isShouldWait)
+                {
+                    if (canHit)
+                    {
+                        DamageForSpider(other);
+                    }
+                }
+                else
+                {
+                    DamageForSpider(other);
+                }
+
+            }
         }
         else
         {
             if (other.gameObject.tag == "Skeleton_lvl1")
-                {
-                    DamageForSkeleton(other);
-                }
+            {
+                DamageForSkeleton(other);
+            }
+            if (other.gameObject.tag == "spider")
+            {
+                DamageForSpider(other);
+            }
         }
     }
 
 
-    IEnumerator hitEffectDestroy(Collider other)
+    IEnumerator hitEffectDestroy(Collider other,float heigh)
     {
-        Vector3 collisionPoint = new Vector3(other.transform.position.x, other.transform.position.y + 1.5f, other.transform.position.z);
+        Vector3 collisionPoint = new Vector3(other.transform.position.x, other.transform.position.y + heigh, other.transform.position.z);
         GameObject hit = Instantiate(hitEffect, collisionPoint, Quaternion.identity);
         hit.transform.parent = other.transform;
         yield return new WaitForSeconds(0.5f);

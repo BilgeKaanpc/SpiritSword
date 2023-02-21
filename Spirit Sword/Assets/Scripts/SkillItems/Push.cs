@@ -24,6 +24,13 @@ public class Push : MonoBehaviour
             other.gameObject.GetComponent<Rigidbody>().AddForce(direction * 100000, ForceMode.Impulse);
 
         }
+        if(other.gameObject.tag == "spider")
+        {
+
+            Vector3 direction = other.transform.position - transform.position; // itme yönü
+            direction = direction.normalized;
+            other.gameObject.GetComponent<Rigidbody>().AddForce(direction * 100000, ForceMode.Impulse);
+        }
     }
 
     IEnumerator push(Rigidbody rb ,Vector3 direction)
