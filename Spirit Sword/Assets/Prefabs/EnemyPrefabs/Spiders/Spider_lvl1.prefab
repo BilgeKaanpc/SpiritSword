@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b57bfcfe42d89c4c9f20b6a63d2f468, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axePower: 30
+  axePower: 300
 --- !u!1 &309534942484504775
 GameObject:
   m_ObjectHideFlags: 0
@@ -1598,11 +1598,11 @@ MonoBehaviour:
   canLook: 0
   isAlive: 1
   followSpeed: 100
-  givenXp: 30
+  givenXp: 100
   healtText: {fileID: 6879774752440183905}
   healtBar: {fileID: 6879774751569122180}
   canvas: {fileID: 6879774751570560894}
-  healt: 300
+  healt: 500
 --- !u!1 &6225606482845116537
 GameObject:
   m_ObjectHideFlags: 0

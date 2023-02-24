@@ -4,42 +4,42 @@ using UnityEngine;
 
 public class Push : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Skeleton_lvl1")
+        if (other.gameObject.tag == "Skeleton_lvl1")
         {
-            Vector3 direction = other.transform.position - transform.position; // itme yönü
-            direction = direction.normalized;
-            other.gameObject.GetComponent<Rigidbody>().AddForce(direction * 100000, ForceMode.Impulse);
-
+            StartCoroutine(push(other));
         }
-        if(other.gameObject.tag == "spider")
+        if (other.gameObject.tag == "Spider")
         {
-
-            Vector3 direction = other.transform.position - transform.position; // itme yönü
-            direction = direction.normalized;
-            other.gameObject.GetComponent<Rigidbody>().AddForce(direction * 100000, ForceMode.Impulse);
+            StartCoroutine(push(other));
         }
     }
-
-    IEnumerator push(Rigidbody rb ,Vector3 direction)
+    private void OnTriggerStay(Collider other)
     {
-        int i = 0;
-        while (i < 100)
+        if (other.gameObject.tag == "Skeleton_lvl1")
         {
-            yield return new WaitForSeconds(0.2f);
-            rb.AddForce(direction * 10, ForceMode.Impulse);
+            pushMethod(other);
         }
+        if (other.gameObject.tag == "spider")
+        {
+            pushMethod(other);
+        }
+    }
+    void pushMethod(Collider other)
+    {
+
+        Vector3 direction = other.transform.position - transform.position;
+        direction = direction.normalized;
+        other.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        other.gameObject.GetComponent<Rigidbody>().AddForce(direction * 2000, ForceMode.Impulse);
+    }
+    IEnumerator push(Collider other)
+    {
+
+        other.gameObject.GetComponent<skeletonController>().canMove = false;
+        yield return new WaitForSeconds(0.5f);
+        other.gameObject.GetComponent<skeletonController>().canMove = true;
     }
 }

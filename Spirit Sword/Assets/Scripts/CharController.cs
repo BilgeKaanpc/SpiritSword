@@ -338,9 +338,7 @@ public class CharController : MonoBehaviour
     {
         if (animationTurn)
         {
-            
             newSword.transform.Rotate(Vector3.up, Time.deltaTime * 100);
-            
         }
         if (healt<=0 && !restart.activeInHierarchy)
         {

@@ -109,17 +109,6 @@ public class Damage : MonoBehaviour
 
             }
         }
-        else
-        {
-            if (other.gameObject.tag == "Skeleton_lvl1")
-            {
-                DamageForSkeleton(other);
-            }
-            if (other.gameObject.tag == "spider")
-            {
-                DamageForSpider(other);
-            }
-        }
     }
 
 

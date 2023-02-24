@@ -8,11 +8,11 @@ public class Magnet : MonoBehaviour
     {
         if(other.gameObject.tag == "Skeleton_lvl1")
         {
-            other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, new Vector3(transform.position.x,0,transform.position.z), 10 * Time.deltaTime);
+            other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, new Vector3(transform.position.x,0,transform.position.z), 20 * Time.deltaTime);
         }
         if(other.gameObject.tag == "spider")
         {
-            other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, new Vector3(transform.position.x, 0, transform.position.z), 10 * Time.deltaTime);
+            other.gameObject.transform.position = Vector3.MoveTowards(other.gameObject.transform.position, new Vector3(transform.position.x, 0, transform.position.z), 20 * Time.deltaTime);
         }
     }
 

@@ -9,14 +9,15 @@ public class skeletonController : MonoBehaviour
     Rigidbody rb;
     Transform tr;
     Animator animator;
-    [SerializeField] float followSpeed;
+    [SerializeField] public float followSpeed;
     [SerializeField] TextMeshProUGUI healtText;
     [SerializeField] GameObject axe;
     [SerializeField] public float givenXp;
     [SerializeField] Image healtBar;
     [SerializeField] public Canvas canvas;
+    public bool canMove;
     float followX, followZ, distance;
-    bool canHit = true;
+    public bool canHit = true;
     int hitDuration = 0;
     public float healt;
     float maxHealt;
@@ -27,7 +28,7 @@ public class skeletonController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        canMove = true;
         StartCoroutine(randomMove());
         maxHealt = healt;
         axe.GetComponent<BoxCollider>().enabled = false;
@@ -117,7 +118,10 @@ public class skeletonController : MonoBehaviour
                         }
                         if (distance > 1.7)
                         {
-                            rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                            if (canMove)
+                            {
+                                rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                            }
 
                         }
                     }

@@ -10,7 +10,7 @@ public class Spider : MonoBehaviour
     public bool isAlive = true;
     float followX, followZ, distance;
 
-    [SerializeField] float followSpeed;
+    [SerializeField]public float followSpeed;
     [SerializeField] public float givenXp;
     [SerializeField] TextMeshProUGUI healtText;
     [SerializeField] Image healtBar;
@@ -21,12 +21,14 @@ public class Spider : MonoBehaviour
     Rigidbody rb;
     Transform tr;
     Animator animator;
-
+    public bool canMove;
+    bool randomWalk = true;
     float maxHealt;
     // Start is called before the first frame update
     void Start()
     {
-
+        canMove = true;
+        StartCoroutine(randomMove());
         maxHealt = healt;
         hero = GameObject.Find("MainCharacter").transform;
         rb = gameObject.GetComponent<Rigidbody>();
@@ -34,6 +36,14 @@ public class Spider : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
     }
 
+    IEnumerator randomMove()
+    {
+
+        yield return new WaitForSeconds(5);
+        randomWalk = false;
+
+        animator.SetInteger("walking", 0);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -77,7 +87,10 @@ public class Spider : MonoBehaviour
 
                         if (distance > 1.7)
                         {
-                            rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                            if (canMove)
+                            {
+                                rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                            }
 
                         }
                         if (distance< 2)
@@ -89,6 +102,18 @@ public class Spider : MonoBehaviour
                     }
 
 
+                }
+                if (randomWalk)
+                {
+                    rb.velocity = rb.velocity = transform.forward * followSpeed * Time.deltaTime;
+                    if (rb.velocity.magnitude > 1)
+                    {
+                        animator.SetInteger("walking", 1);
+                    }
+                    else
+                    {
+                        animator.SetInteger("walking", 0);
+                    }
                 }
             }
         }
