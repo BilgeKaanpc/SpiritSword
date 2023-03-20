@@ -14,7 +14,5 @@ I'm now working on this game project which is written in C# programming language
 
     - C#
     - Unity 3D
-    - Animations
-    - PlayerPrefs
     - UI
     - 3D Models
